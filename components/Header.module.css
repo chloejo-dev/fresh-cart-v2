@@ -1,0 +1,94 @@
+/* Navbar Styling */
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 12px clamp(16px, 5vw, 60px);
+    background-color: var(--white);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Logo, search bar, user menu layout*/
+.left {
+    flex: 1;
+    display: flex;
+}
+
+.right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.center {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+}
+
+.logoContainer {
+    display: flex;
+    align-items: center;
+}
+
+.logoContainer a {
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-green);
+}
+
+.userMenu {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.userMenu a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.userMenu a:hover {
+    color: var(--primary-green);
+}
+
+.authBtn {
+    background-color: var(--primary-green);
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition: opacity 0.2s;
+}
+
+.authBtn:hover {
+    opacity: 0.7;
+}
+
+.categoryStrip {
+    background-color: var(--primary-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.category {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: opacity 0.2s;
+}
+
+.category:hover {
+    opacity: 0.5;
+}

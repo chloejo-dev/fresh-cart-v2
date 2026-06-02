@@ -1,0 +1,30 @@
+.loading {
+    text-align: center;
+    font-size: 25px;
+}
+
+.productsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px 0px;
+}
+
+.productRow {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.singleProductContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    align-items: center;
+    text-align: center;
+}
+
+.singleProductContainer a {
+    color: var(--text-dark);
+    text-decoration: none;
+}

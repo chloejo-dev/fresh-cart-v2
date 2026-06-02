@@ -1,0 +1,42 @@
+.footer {
+    background-color: var(--primary-green);
+    color: var(--white);
+    padding: 20px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.links {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.links a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.links a:hover {
+    opacity: 1;
+}
+
+.info {
+    text-align: center;
+    font-size: 12px;
+    opacity: 0.8;
+}
