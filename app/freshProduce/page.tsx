@@ -11,6 +11,7 @@ type Product = {
   product_pic: string;
 };
 
+// Group the products into 3 for display
 function sliceArray(arr: Product[], size: number): Product[][] {
   const chunkedArr: Product[][] = [];
   for (let index = 0; index < arr.length; index += size) {
@@ -33,7 +34,7 @@ export default function Page() {
         // If res fails, throw error
         // res.ok === true
         if (!res.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("Network response was not ok.");
         }
 
         // Data type = Product, data is an array of those elements

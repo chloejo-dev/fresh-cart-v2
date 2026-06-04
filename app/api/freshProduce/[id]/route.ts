@@ -7,7 +7,6 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-
   try {
     const [rows] = await db.query<RowDataPacket[]>(
       "SELECT * FROM groceries WHERE product_id=?",

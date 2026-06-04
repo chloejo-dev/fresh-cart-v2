@@ -5,7 +5,6 @@ import db from "@/lib/db";
 export async function GET() {
   try {
     const [products] = await db.query("SELECT * FROM groceries");
-    console.log("server: ", products);
     return NextResponse.json(products);
   } catch (err: unknown) {
     if (err instanceof Error) {
