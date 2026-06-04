@@ -66,7 +66,6 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   // Adjust product quantity
   const increaseQty = () => {
     setQuantity((prev) => prev + 1);
-    console.log("Increased qty clicked", cartStatus);
     setCartStatus("idle");
   };
 

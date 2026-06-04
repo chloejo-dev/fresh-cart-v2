@@ -12,21 +12,15 @@
 
 .link {
     color: inherit;
-    /* text-decoration: none; */
 }
 
 .productContainer {
     display: flex;
     justify-content: center;
-    /* align-items: center; */
     height: 80vh;
     max-width: 800px;
-    /* min-height: calc(100vh - 100px); */
     width: 100%;
     margin: 100px auto;
-    /* padding: 100px; */
-    /* margin-top: 30px;
-  margin-bottom: 30px; */
 }
 
 .productInfoContainer {

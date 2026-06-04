@@ -4,7 +4,7 @@ import db from "@/lib/db";
 // Handle HTTP requests - GET, POST, PUT, DELETE, UPDATE
 export async function GET() {
   try {
-    const [products] = await db.query("SELECT * FROM groceries");
+    const [products] = await db.query("SELECT * FROM products");
     return NextResponse.json(products);
   } catch (err: unknown) {
     if (err instanceof Error) {

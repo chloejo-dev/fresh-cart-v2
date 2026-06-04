@@ -51,8 +51,9 @@ export default function Page() {
     fetchProducts();
   }, []);
 
+  // Products: raw array -> [{}, {}, {}, ... {}]
+  // chuckedArr: altered array -> [[{}, {}, {}], [{}, {}, {}], ..]
   const chunkedArr = sliceArray(products, 3);
-
   // isLoading(true) = request in progress
   // isLoading(false) = request finished (success or error)
   if (isLoading) {

@@ -9,7 +9,7 @@ export async function GET(
   const { id } = await params;
   try {
     const [rows] = await db.query<RowDataPacket[]>(
-      "SELECT * FROM groceries WHERE product_id=?",
+      "SELECT * FROM products WHERE product_id=?",
       [id],
     );
     const product = rows[0];
