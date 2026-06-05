@@ -2,15 +2,17 @@
 
 import styles from "./page.module.css";
 import Image from "next/image";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, Minus } from "lucide-react";
 import { useEffect, useState } from "react";
 
-type CartItem = {
+interface CartItem {
   product_name: string;
   product_id: number;
   product_price: number;
   product_pic: string;
-};
+  quantity: number;
+}
+
 export default function Page() {
   const [cartArr, setCartArr] = useState<CartItem[]>([]);
   const username = "testUser";
@@ -25,7 +27,45 @@ export default function Page() {
     fetchCartItems();
   }, [username]);
 
-  console.log("Browser", cartArr);
+  const increaseQty = async (id: number) => {
+    // Find product current product using id
+    const currentItem = cartArr.find((item) => item.product_id === id);
+
+    // Make sure currentItem is not undefined
+    if (!currentItem) return;
+
+    const newQuantity = currentItem.quantity + 1;
+
+    // Frontend => update quantity and rerender cart page
+    setCartArr((prev) =>
+      prev.map((item) =>
+        item.product_id === id
+          ? {
+              ...item,
+              quantity: item.quantity + 1,
+            }
+          : item,
+      ),
+    );
+
+    // Frontend => backend to request quantity change
+    const res = await fetch(`/api/cart/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        quantity: newQuantity,
+        username: "testUser",
+      }),
+    });
+    const data = await res.json();
+    console.log("Browser: ", data);
+  };
+
+  if (cartArr.length === 0) {
+    return <p>Your cart is empty!</p>;
+  }
 
   return (
     <main>
@@ -45,16 +85,19 @@ export default function Page() {
                     <span>{item.product_name}</span>
                   </div>
                   <div className={styles.productPrice}>
-                    <span>${item.product_price}</span>
+                    <span>{item.product_price}</span>
                   </div>
                 </div>
 
                 <div className={styles.btnContainer}>
                   <button type='button'>
-                    <Trash2 />
+                    {item.quantity === 1 ? <Trash2 /> : <Minus />}
                   </button>
-                  <span>1</span>
-                  <button type='button'>
+                  <span>{item.quantity}</span>
+                  <button
+                    type='button'
+                    onClick={() => increaseQty(item.product_id)}
+                  >
                     <Plus />
                   </button>
                   <button className={styles.deleteBtn}>Delete</button>

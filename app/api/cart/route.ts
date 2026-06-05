@@ -11,6 +11,32 @@ interface CartItem extends RowDataPacket {
   product_pic: string;
 }
 
+// Get all items from user's cart
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const userName = searchParams.get("username");
+
+    const [rows] = await db.query<CartItem[]>(
+      "SELECT cart.quantity, products.product_id, products.product_name, products.product_price, products.product_pic FROM cart INNER JOIN products ON cart.product_id = products.product_id WHERE username=?",
+      [userName],
+    );
+
+    const cartItems = rows;
+    return NextResponse.json(cartItems, { status: 200 });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error("GET /api/cart failed:", err.message);
+    } else {
+      console.error("GET /api/cart failed:", err);
+    }
+    return NextResponse.json(
+      { message: "Fail to fetch cart items" },
+      { status: 500 },
+    );
+  }
+}
+
 // Add product(s) to user's cart
 export async function POST(request: Request) {
   try {
@@ -63,27 +89,5 @@ export async function POST(request: Request) {
   }
 }
 
-// Get all items from user's cart
-export async function GET(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const userName = searchParams.get("username");
-
-    const [rows] = await db.query<CartItem[]>(
-      "SELECT cart.quantity, products.product_id, products.product_name, products.product_price, products.product_pic FROM cart INNER JOIN products ON cart.product_id = products.product_id WHERE username=?",
-      [userName],
-    );
-    const cartItems = rows;
-    return NextResponse.json(cartItems, { status: 200 });
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      console.error("GET /api/cart failed:", err.message);
-    } else {
-      console.error("GET /api/cart failed:", err);
-    }
-    return NextResponse.json(
-      { message: "Fail to fetch cart items" },
-      { status: 500 },
-    );
-  }
-}
+// Delete product if quantity = 0
+export async function DELETE() {}

@@ -96,6 +96,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       if (!res.ok) {
         throw new Error("Failed to add product to cart.");
       }
+
       const data = await res.json();
 
       if (data.action === "update") {
