@@ -1,17 +1,7 @@
 import { NextResponse } from "next/server"; // Similar to res.json in Express
 import db from "@/lib/db";
-import type { ResultSetHeader, RowDataPacket } from "mysql2";
+import type { ResultSetHeader } from "mysql2";
 
-// // Get single product from user cart
-// export async function GET({ params }: { params: Promise<{ id: string }> }) {
-//   const { id } = await params;
-//   console.log("Server : ", id);
-
-//   return NextResponse.json(
-//     { message: "Fetch single product" },
-//     { status: 200 },
-//   );
-// }
 // Update product quantity using PATCH
 export async function PATCH(
   request: Request,
@@ -19,7 +9,7 @@ export async function PATCH(
 ) {
   // Get product id info from frontend
   const { id } = await params;
-  console.log(id);
+
   // Get quantity and username from frontend
   const { quantity, username } = await request.json();
 
