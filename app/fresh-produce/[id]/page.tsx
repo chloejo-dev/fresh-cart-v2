@@ -26,7 +26,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const res = await fetch(`/api/freshProduce/${id}`);
+        const res = await fetch(`/api/fresh-produce/${id}`);
 
         // If res fails, throw error
         // res.ok === true
@@ -120,7 +120,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     <>
       <div className={styles.detailPageContainer}>
         <div className={styles.linkContainer}>
-          <Link href='/freshProduce' className={styles.link}>
+          <Link href='/fresh-produce' className={styles.link}>
             Go Back to Fresh Produce List
           </Link>
         </div>

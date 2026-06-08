@@ -29,7 +29,7 @@ export default function Page() {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const res = await fetch("/api/freshProduce");
+        const res = await fetch("/api/fresh-produce");
 
         // If res fails, throw error
         // res.ok === true
@@ -81,7 +81,7 @@ export default function Page() {
                 height={150}
                 className={styles.productImage}
               />
-              <Link href={`/freshProduce/${product.product_id}`}>
+              <Link href={`/fresh-produce/${product.product_id}`}>
                 {product.product_name}
               </Link>
             </div>

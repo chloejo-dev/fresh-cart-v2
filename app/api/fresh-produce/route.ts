@@ -8,9 +8,9 @@ export async function GET() {
     return NextResponse.json(products);
   } catch (err: unknown) {
     if (err instanceof Error) {
-      console.error("GET /api/freshProduce failed:", err.message);
+      console.error("GET /api/fresh-produce failed:", err.message);
     } else {
-      console.error("GET /api/freshProduce failed:", err);
+      console.error("GET /api/fresh-produce failed:", err);
     }
 
     return NextResponse.json(

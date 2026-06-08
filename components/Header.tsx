@@ -27,7 +27,7 @@ export default function Header() {
           <nav className={styles.userMenu}>
             <Link href='/reorder'>Reorder</Link>
             <Link href='/account'>Account</Link>
-            <Link href='/signIn' className={styles.authBtn}>
+            <Link href='/sign-in' className={styles.authBtn}>
               Sign In
             </Link>
 
@@ -40,7 +40,7 @@ export default function Header() {
         </div>
       </header>
       <div className={styles.categoryStrip}>
-        <Link href='/freshProduce' className={styles.category}>
+        <Link href='/fresh-produce' className={styles.category}>
           Fresh Produce
         </Link>
         <Link href='/meat' className={styles.category}>
