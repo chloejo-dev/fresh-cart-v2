@@ -18,7 +18,16 @@ export async function GET(request: Request) {
     const userName = searchParams.get("username");
 
     const [rows] = await db.query<CartItem[]>(
-      "SELECT cart.quantity, products.product_id, products.product_name, products.product_price, products.product_pic FROM cart INNER JOIN products ON cart.product_id = products.product_id WHERE username=?",
+      `SELECT
+      cart.quantity,
+      products.product_id,
+      products.product_name,
+      products.product_price,
+      products.product_pic
+      FROM cart
+      INNER JOIN products
+      ON cart.product_id = products.product_id
+      WHERE username=?`,
       [userName],
     );
 
@@ -73,7 +82,7 @@ export async function POST(request: Request) {
           action: "insert",
           message: "Product inserted",
         },
-        { status: 200 },
+        { status: 201 },
       );
     }
   } catch (err: unknown) {
@@ -88,6 +97,3 @@ export async function POST(request: Request) {
     );
   }
 }
-
-// Delete product if quantity = 0
-export async function DELETE() {}

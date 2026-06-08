@@ -2,6 +2,16 @@ import { NextResponse } from "next/server"; // Similar to res.json in Express
 import db from "@/lib/db";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 
+// // Get single product from user cart
+// export async function GET({ params }: { params: Promise<{ id: string }> }) {
+//   const { id } = await params;
+//   console.log("Server : ", id);
+
+//   return NextResponse.json(
+//     { message: "Fetch single product" },
+//     { status: 200 },
+//   );
+// }
 // Update product quantity using PATCH
 export async function PATCH(
   request: Request,
@@ -9,6 +19,7 @@ export async function PATCH(
 ) {
   // Get product id info from frontend
   const { id } = await params;
+  console.log(id);
   // Get quantity and username from frontend
   const { quantity, username } = await request.json();
 
@@ -19,6 +30,7 @@ export async function PATCH(
       [quantity, id, username],
     );
 
+    // Error handling
     if (rows.affectedRows === 0) {
       return NextResponse.json(
         {
@@ -31,7 +43,7 @@ export async function PATCH(
     // Send response to frontend
     return NextResponse.json(
       {
-        message: "Product quantity updated",
+        result: "Success",
       },
       { status: 200 },
     );
@@ -43,6 +55,50 @@ export async function PATCH(
     }
     return NextResponse.json(
       { message: "Fail to change product quantity" },
+      { status: 500 },
+    );
+  }
+}
+
+// Delete product if quantity === 0
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  // Get id and username info from frontend
+  const { id } = await params;
+  // request.json() is the body sent by frontend
+  const { username } = await request.json();
+
+  try {
+    const [rows] = await db.query<ResultSetHeader>(
+      "DELETE FROM cart WHERE product_id =? AND username=?",
+      [id, username],
+    );
+
+    // Error handling
+    if (rows.affectedRows === 0) {
+      return NextResponse.json(
+        {
+          message: "Item not found in user's cart",
+        },
+        { status: 404 },
+      );
+    }
+
+    // Return response to frontend
+    return NextResponse.json(
+      { message: "Product successfully deleted" },
+      { status: 200 },
+    );
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(`DELETE /api/cart/${id} failed:`, err.message);
+    } else {
+      console.error(`DELETE /api/cart/${id} failed:`, err);
+    }
+    return NextResponse.json(
+      { message: "Fail to delete product" },
       { status: 500 },
     );
   }

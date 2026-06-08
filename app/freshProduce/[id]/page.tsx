@@ -10,6 +10,7 @@ type Product = {
   product_price: number;
   product_details: string;
   product_pic: string;
+  quantity: number;
 };
 
 type cartStatus = "idle" | "updated" | "added" | "error" | "viewCart";
@@ -21,7 +22,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const [quantity, setQuantity] = useState(1);
   const [cartStatus, setCartStatus] = useState<cartStatus>("idle");
 
-  // Fetch/display product data from DB
+  // Fetch/display single product data from DB
   useEffect(() => {
     async function fetchProduct() {
       try {
@@ -35,6 +36,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
         const data = await res.json();
         setProduct(data);
+        setQuantity(data.quantity ?? 1);
       } catch (err) {
         console.log("Error fetching products", err);
       }

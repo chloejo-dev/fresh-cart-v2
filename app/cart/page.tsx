@@ -4,7 +4,7 @@ import styles from "./page.module.css";
 import Image from "next/image";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { useEffect, useState } from "react";
-
+import toast, { Toaster } from "react-hot-toast";
 interface CartItem {
   product_name: string;
   product_id: number;
@@ -16,6 +16,7 @@ interface CartItem {
 export default function Page() {
   const [cartArr, setCartArr] = useState<CartItem[]>([]);
   const username = "testUser";
+  const [msg, setMsg] = useState<string>("");
 
   // Fetch cart items info using product_id
   useEffect(() => {
@@ -31,7 +32,7 @@ export default function Page() {
     // Find product current product using id
     const currentItem = cartArr.find((item) => item.product_id === id);
 
-    // Make sure currentItem is not undefined
+    // Type narrowing: Make sure currentItem is not undefined
     if (!currentItem) return;
 
     const newQuantity = currentItem.quantity + 1;
@@ -59,8 +60,72 @@ export default function Page() {
         username: "testUser",
       }),
     });
-    const data = await res.json();
-    console.log("Browser: ", data);
+
+    if (!res.ok) {
+      const errorData = await res.json();
+
+      toast.error(errorData.message);
+      return;
+    }
+  };
+
+  const decreaseQty = async (id: number) => {
+    // Find current product using id
+    const currentItem = cartArr.find((item) => item.product_id === id);
+
+    // Type narrowing: Make sure currentItem is not undefined
+    if (!currentItem) return;
+
+    // Check currentItem quantity === 1 or > 1
+    if (currentItem.quantity === 1) {
+      // Frontend => delete product and rerender cart page
+      setCartArr((prev) => prev.filter((item) => item.product_id !== id));
+
+      // Frontend => request backend to delete product
+      const res = await fetch(`/api/cart/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: "testUser",
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+      toast.success(data.message);
+    }
+
+    // Calculate new quantity
+    const newQuantity = currentItem.quantity - 1;
+
+    // Frontend => update quantity and rerender cart page
+    setCartArr((prev) =>
+      prev.map((item) =>
+        item.product_id === id
+          ? {
+              ...item,
+              quantity: newQuantity,
+            }
+          : item,
+      ),
+    );
+
+    // Frontend => backend to request quantity change
+    await fetch(`/api/cart/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        quantity: newQuantity,
+        username: "testUser",
+      }),
+    });
   };
 
   if (cartArr.length === 0) {
@@ -85,12 +150,15 @@ export default function Page() {
                     <span>{item.product_name}</span>
                   </div>
                   <div className={styles.productPrice}>
-                    <span>{item.product_price}</span>
+                    <span>${item.product_price}</span>
                   </div>
                 </div>
 
                 <div className={styles.btnContainer}>
-                  <button type='button'>
+                  <button
+                    type='button'
+                    onClick={() => decreaseQty(item.product_id)}
+                  >
                     {item.quantity === 1 ? <Trash2 /> : <Minus />}
                   </button>
                   <span>{item.quantity}</span>
@@ -102,6 +170,9 @@ export default function Page() {
                   </button>
                   <button className={styles.deleteBtn}>Delete</button>
                   <button className={styles.saveBtn}>Save for later</button>
+                </div>
+                <div className={styles.msg}>
+                  <Toaster />
                 </div>
               </div>
             </div>
