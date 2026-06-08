@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Exo_2 } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
 
 const exo2 = Exo_2({
   subsets: ["latin"],
@@ -25,6 +26,7 @@ export default function RootLayout({
       <body>
         <Header />
         {children}
+        <Toaster toastOptions={{ duration: 3000 }} />
         <Footer />
       </body>
     </html>
