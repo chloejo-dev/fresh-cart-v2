@@ -3,13 +3,39 @@ import React, { useState } from "react";
 import styles from "./page.module.css";
 
 export default function Page() {
-  const [username, setUserName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [rePassword, setRePassword] = useState<string>("");
+  let inputPasswordError = "";
+  let reEnteredPasswordError = "";
 
-  const handleSignUp = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  console.log("Browser: ", password, rePassword);
+
+  const hasSpecialCharacter = /[!@#$%^&*]/.test(password);
+  // Password validation logic => derived state
+  // Password s/b at least 10 characters
+  // Password should include one special characters e.g. #, %, $...
+  if (password.length > 0) {
+    if (password.length < 10) {
+      inputPasswordError = "Password should be at least 10 characters";
+    } else if (!hasSpecialCharacter) {
+      inputPasswordError =
+        "Password should include at least one special character(e.g. #, $, %...)";
+    }
+
+    if (rePassword.length > 0 && rePassword !== password) {
+      reEnteredPasswordError = "Password not match";
+    }
+  }
+
+  const handleSignUp: React.SubmitEventHandler<HTMLFormElement> = async (e) => {
+    // Get user entered information from sign up form
     e.preventDefault();
-    const form = new FormData();
 
-    console.log(form.get("username"));
+    const formData = new FormData(e.currentTarget);
+
+    const username = formData.get("username");
+    const email = formData.get("email");
+    const password = formData.get("password");
   };
 
   return (
@@ -43,8 +69,10 @@ export default function Page() {
               type='password'
               required
               autoComplete='new-password'
+              onChange={(e) => setPassword(e.target.value)}
             ></input>
           </div>
+          {inputPasswordError ? <p>{inputPasswordError}</p> : <p></p>}
           <div className={styles.formGroup}>
             <label htmlFor='confirmPassword'>Confirm your password:</label>
             <input
@@ -53,8 +81,10 @@ export default function Page() {
               type='password'
               required
               autoComplete='new-password'
+              onChange={(e) => setRePassword(e.target.value)}
             ></input>
           </div>
+          {reEnteredPasswordError ? <p>{reEnteredPasswordError}</p> : <p></p>}
         </div>
         <div className={styles.buttonContainer}>
           <button type='submit' className={styles.submitBtn}>
