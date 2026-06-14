@@ -38,7 +38,7 @@ export default function Page() {
   }
   // confirmPassword === password
   if (confirmPassword.length > 0 && confirmPassword !== password) {
-    reEnteredPasswordError = "Password not match";
+    reEnteredPasswordError = "Password do not match";
   }
 
   // Handle sign up when user click 'Submit'
