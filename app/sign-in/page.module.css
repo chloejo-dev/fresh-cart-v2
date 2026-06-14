@@ -1,0 +1,46 @@
+.signInContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    padding: 2rem;
+    gap: 10px;
+}
+
+
+.inputContainer {
+    width: 100%;
+    max-width: 400px;
+}
+
+.formGroup {
+    gap: 6px;
+    margin-bottom: 20px;
+    /* background-color: aquamarine; */
+
+}
+
+.formGroup input {
+    width: 100%;
+    padding: 10px 12px;
+    font: inherit;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.signInBtn {
+    font-family: inherit;
+    font-size: 20px;
+    color: var(--white);
+    background-color: var(--primary-green);
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.signUpContainer {
+    display: flex;
+    gap: 0.5rem;
+}
