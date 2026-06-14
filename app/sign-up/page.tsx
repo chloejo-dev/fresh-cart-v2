@@ -45,6 +45,8 @@ export default function Page() {
   const handleSignUp: React.SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
+    setSubmitError("");
+
     // Get user entered information from sign up form
     const formData = new FormData(e.currentTarget);
 
@@ -168,7 +170,7 @@ export default function Page() {
             Submit
           </button>
         </div>
-        <p>{submitError}</p>
+        {submitError && <p>{submitError}</p>}
       </form>
     </main>
   );
