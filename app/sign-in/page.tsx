@@ -14,7 +14,7 @@ export default function Page() {
 
   const router = useRouter();
 
-  // Real-time validation: username, password
+  // Real-time validation for UX: username, password
   // required attribute: prevent any empty input fields
   if (username.includes(" ")) {
     usernameError = "Username cannot contain spaces";
@@ -29,6 +29,7 @@ export default function Page() {
   const handleSignIn: React.SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
+    setSignInErr("");
     // Get user entered info from the form using a FormData object
     const formData = new FormData(e.currentTarget);
 
@@ -99,6 +100,7 @@ export default function Page() {
               ></input>
               {passwordError && <p>{passwordError}</p>}
             </div>
+            {signInErr && <p>{signInErr}</p>}
           </div>
           <button type='submit' className={styles.signInBtn}>
             Sign In
