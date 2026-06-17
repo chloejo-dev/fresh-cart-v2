@@ -47,6 +47,7 @@ export async function GET() {
     const currentUser = rows[0];
     return NextResponse.json(currentUser);
   } catch (err: unknown) {
+    console.error(err);
     // N: Return 401 Unauthorized
     return NextResponse.json(
       { message: "Internal Server Error" },
