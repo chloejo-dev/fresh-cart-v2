@@ -1,0 +1,54 @@
+.main {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    padding: 3rem 1rem;
+    gap: 2rem;
+
+}
+
+.userInfoContainer {
+    display: flex;
+    align-items: center;
+    padding: 2rem;
+    gap: 2rem;
+    /* Card UI */
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.buttonContainer {
+    /* background-color: yellow; */
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.button {
+    font-family: inherit;
+    padding: 0.625rem 1.25rem;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.button:hover {
+    opacity: 0.75;
+}
+
+.primaryButton {
+    background-color: var(--primary-green);
+    color: white;
+}
+
+.secondaryButton {
+    background-color: transparent;
+    color: var(--primary-green);
+    border: 1px solid var(--primary-green);
+}
