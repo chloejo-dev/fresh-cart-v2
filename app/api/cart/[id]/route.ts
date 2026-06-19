@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"; // Similar to res.json in Express
 import db from "@/lib/db";
 import type { ResultSetHeader } from "mysql2";
 
-// Update product quantity using PATCH
+// Update product quantity in user's cart using PATCH
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
