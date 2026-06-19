@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server"; // Similar to res.json in Express
 import db from "@/lib/db";
 import type { RowDataPacket } from "mysql2";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 
 interface CartItem extends RowDataPacket {
-  cart_id: number;
   product_id: number;
   quantity: number;
   product_name: string;
@@ -12,10 +13,15 @@ interface CartItem extends RowDataPacket {
 }
 
 // Get all items from user's cart
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const userName = searchParams.get("username");
+    // Check if user has signed in
+    const userId = await getUserIdFromToken();
+
+    // N:
+    if (userId === null) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
 
     const [rows] = await db.query<CartItem[]>(
       `SELECT
@@ -27,12 +33,11 @@ export async function GET(request: Request) {
       FROM cart
       INNER JOIN products
       ON cart.product_id = products.product_id
-      WHERE username=?`,
-      [userName],
+      WHERE cart.user_id=?`,
+      [userId],
     );
 
-    const cartItems = rows;
-    return NextResponse.json(cartItems, { status: 200 });
+    return NextResponse.json(rows, { status: 200 });
   } catch (err: unknown) {
     if (err instanceof Error) {
       console.error("GET /api/cart failed:", err.message);
@@ -49,19 +54,34 @@ export async function GET(request: Request) {
 // Add product(s) to user's cart
 export async function POST(request: Request) {
   try {
-    const { product_id, username, quantity } = await request.json();
+    // Check if user has signed in
+    const userId = await getUserIdFromToken();
+
+    // N:
+    if (userId === null) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const { productId, quantity } = await request.json();
+    // Error handling
+    if (typeof productId !== "number" || typeof quantity !== "number") {
+      return NextResponse.json(
+        { message: "Invalid request body" },
+        { status: 400 },
+      );
+    }
 
     // Check if product is already in user's cart
     const [rows] = await db.query<CartItem[]>(
-      "SELECT * FROM cart WHERE product_id=? AND username=?",
-      [product_id, username],
+      "SELECT product_id FROM cart WHERE product_id=? AND user_id=?",
+      [productId, userId],
     );
 
     // Yes -> Update product quantity
     if (rows.length > 0) {
       await db.query(
-        "UPDATE cart SET quantity=? WHERE product_id=? AND username=?",
-        [quantity, product_id, username],
+        "UPDATE cart SET quantity=? WHERE product_id=? AND user_id=?",
+        [quantity, productId, userId],
       );
       return NextResponse.json(
         {
@@ -74,8 +94,8 @@ export async function POST(request: Request) {
     // No -> Insert product info to user's cart
     else {
       await db.query(
-        "INSERT INTO cart (product_id, quantity, username) VALUES (?, ?, ?)",
-        [product_id, quantity, username],
+        "INSERT INTO cart (product_id, quantity, user_id) VALUES (?, ?, ?)",
+        [productId, quantity, userId],
       );
       return NextResponse.json(
         {
@@ -95,5 +115,37 @@ export async function POST(request: Request) {
       { message: "Fail to update cart" },
       { status: 500 },
     );
+  }
+}
+
+// helper function to verify user's JWT
+async function getUserIdFromToken() {
+  try {
+    // Get user's cookie and token
+    const cookieStore = await cookies();
+    const token = cookieStore.get("auth_token");
+
+    // Token exists?
+    // N:
+    if (!token) {
+      return null;
+    }
+
+    // Verify token
+    const verifiedToken = jwt.verify(token.value, process.env.JWT_SECRET!);
+
+    if (typeof verifiedToken !== "object" || verifiedToken === null) {
+      return null;
+    }
+
+    const userId = verifiedToken.userId;
+
+    if (typeof userId !== "number") {
+      return null;
+    }
+
+    return userId;
+  } catch {
+    return null;
   }
 }
