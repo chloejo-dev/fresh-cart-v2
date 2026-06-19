@@ -3,8 +3,45 @@ import Link from "next/link";
 import Image from "next/image";
 import Search from "./Search";
 import styles from "@/components/Header.module.css";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
+  const [isSignIn, setIsSignIn] = useState<boolean>(false);
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // Check if user has signed in using /api/me
+    const checkSignIn = async () => {
+      const res = await fetch("/api/me");
+
+      if (!res.ok) {
+        // N:
+        setIsSignIn(false);
+        return;
+      }
+
+      // Y:
+      setIsSignIn(true);
+    };
+
+    checkSignIn();
+  }, [pathname]);
+
+  const handleSignOut = async () => {
+    try {
+      const res = await fetch("/api/sign-out", { method: "POST" });
+
+      if (!res.ok) {
+        console.error("Failed to sign out");
+        return;
+      }
+      setIsSignIn(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <>
       <header className={styles.navbar}>
@@ -27,9 +64,15 @@ export default function Header() {
           <nav className={styles.userMenu}>
             <Link href='/reorder'>Reorder</Link>
             <Link href='/account'>Account</Link>
-            <Link href='/sign-in' className={styles.authBtn}>
-              Sign In
-            </Link>
+            {isSignIn ? (
+              <button className={styles.authBtn} onClick={handleSignOut}>
+                Sign Out
+              </button>
+            ) : (
+              <Link href='/sign-in' className={styles.authBtn}>
+                Sign In
+              </Link>
+            )}
 
             <div className={styles.cartIcon}>
               <Link href='/cart'>
