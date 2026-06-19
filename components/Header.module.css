@@ -59,9 +59,11 @@
 }
 
 .authBtn {
+    font-family: inherit;
     background-color: var(--primary-green);
     color: white !important;
     padding: 10px 20px;
+    border: none;
     border-radius: 20px;
     transition: opacity 0.2s;
 }
