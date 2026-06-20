@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server"; // Similar to res.json in Express
 import db from "@/lib/db";
 import type { RowDataPacket } from "mysql2";
-import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
+import getUserIdFromToken from "@/lib/auth";
 
 interface CartItem extends RowDataPacket {
   product_id: number;
@@ -10,6 +9,9 @@ interface CartItem extends RowDataPacket {
   product_name: string;
   product_price: number;
   product_pic: string;
+}
+interface ExistingCartItemRow extends RowDataPacket {
+  product_id: number;
 }
 
 // Get all items from user's cart
@@ -45,13 +47,13 @@ export async function GET() {
       console.error("GET /api/cart failed:", err);
     }
     return NextResponse.json(
-      { message: "Fail to fetch cart items" },
+      { message: "Failed to fetch cart items" },
       { status: 500 },
     );
   }
 }
 
-// Add product(s) to user's cart
+// Add or update a product in user's cart
 export async function POST(request: Request) {
   try {
     // Check if user has signed in
@@ -63,24 +65,31 @@ export async function POST(request: Request) {
     }
 
     const { productId, quantity } = await request.json();
+
     // Error handling
-    if (typeof productId !== "number" || typeof quantity !== "number") {
+    const isValidBody =
+      Number.isInteger(productId) &&
+      productId > 0 &&
+      Number.isInteger(quantity) &&
+      quantity > 0;
+
+    if (!isValidBody) {
       return NextResponse.json(
-        { message: "Invalid request body" },
+        { message: "Invalid json body" },
         { status: 400 },
       );
     }
 
     // Check if product is already in user's cart
-    const [rows] = await db.query<CartItem[]>(
-      "SELECT product_id FROM cart WHERE product_id=? AND user_id=?",
+    const [rows] = await db.query<ExistingCartItemRow[]>(
+      "SELECT product_id FROM cart WHERE product_id= ? AND user_id= ?",
       [productId, userId],
     );
 
     // Yes -> Update product quantity
     if (rows.length > 0) {
       await db.query(
-        "UPDATE cart SET quantity=? WHERE product_id=? AND user_id=?",
+        "UPDATE cart SET quantity=? WHERE product_id= ? AND user_id= ?",
         [quantity, productId, userId],
       );
       return NextResponse.json(
@@ -112,40 +121,8 @@ export async function POST(request: Request) {
       console.error("POST /api/cart failed:", err);
     }
     return NextResponse.json(
-      { message: "Fail to update cart" },
+      { message: "Failed to update cart" },
       { status: 500 },
     );
-  }
-}
-
-// helper function to verify user's JWT
-async function getUserIdFromToken() {
-  try {
-    // Get user's cookie and token
-    const cookieStore = await cookies();
-    const token = cookieStore.get("auth_token");
-
-    // Token exists?
-    // N:
-    if (!token) {
-      return null;
-    }
-
-    // Verify token
-    const verifiedToken = jwt.verify(token.value, process.env.JWT_SECRET!);
-
-    if (typeof verifiedToken !== "object" || verifiedToken === null) {
-      return null;
-    }
-
-    const userId = verifiedToken.userId;
-
-    if (typeof userId !== "number") {
-      return null;
-    }
-
-    return userId;
-  } catch {
-    return null;
   }
 }
