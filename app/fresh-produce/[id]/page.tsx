@@ -38,7 +38,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
         setProduct(data);
         setQuantity(data.quantity ?? 1);
       } catch (err) {
-        console.log("Error fetching products", err);
+        console.error("Error fetching products", err);
       }
     }
     fetchProduct();
@@ -89,9 +89,8 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          product_id: product.product_id,
-          quantity: quantity,
-          username: "testUser",
+          productId: product.product_id,
+          quantity,
         }),
       });
 
