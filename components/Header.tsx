@@ -4,12 +4,13 @@ import Image from "next/image";
 import Search from "./Search";
 import styles from "@/components/Header.module.css";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Header() {
   const [isSignIn, setIsSignIn] = useState<boolean>(false);
 
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     // Check if user has signed in using /api/me
