@@ -25,7 +25,7 @@ export default function Page() {
   const [isLoading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch data
+  // Fetch all product data
   useEffect(() => {
     async function fetchProducts() {
       try {
