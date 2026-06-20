@@ -16,76 +16,117 @@ interface CartItem {
 
 export default function Page() {
   const [cartArr, setCartArr] = useState<CartItem[]>([]);
-  const username = "testUser";
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Fetch cart items info using product_id
   useEffect(() => {
     const fetchCartItems = async () => {
-      const res = await fetch(`/api/cart?username=${username}`);
-      const data = await res.json();
-      setCartArr(data);
+      try {
+        const res = await fetch("/api/cart");
+        const data = await res.json();
+
+        if (!res.ok) {
+          toast.error(data.message);
+          return;
+        }
+        setCartArr(data);
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to load cart");
+      } finally {
+        setIsLoading(false);
+      }
     };
+
     fetchCartItems();
-  }, [username]);
+  }, []);
 
+  // Increase current product quantity
   const increaseQty = async (id: number) => {
-    // Find product current product using id
-    const currentItem = cartArr.find((item) => item.product_id === id);
+    try {
+      // Find product current product using id
+      const currentItem = cartArr.find((item) => item.product_id === id);
 
-    // Type narrowing: Make sure currentItem is not undefined
-    if (!currentItem) return;
+      // Type narrowing: Make sure currentItem is not undefined
+      if (!currentItem) return;
 
-    // Calculate new quantity
-    const newQuantity = currentItem.quantity + 1;
+      // Calculate new quantity
+      const newQuantity = currentItem.quantity + 1;
 
-    // Server-first change
-    const res = await fetch(`/api/cart/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        quantity: newQuantity,
-        username: "testUser",
-      }),
-    });
-
-    if (!res.ok) {
-      const data = await res.json();
-      toast.error(data.message);
-      return;
-    }
-
-    // Frontend => rerender cart page
-    setCartArr((prev) =>
-      prev.map((item) =>
-        item.product_id === id
-          ? {
-              ...item,
-              quantity: newQuantity,
-            }
-          : item,
-      ),
-    );
-  };
-
-  const decreaseQty = async (id: number) => {
-    // Find current product using id
-    const currentItem = cartArr.find((item) => item.product_id === id);
-
-    // Type narrowing: Make sure currentItem is not undefined
-    if (!currentItem) return;
-
-    // If currentItem quantity === 1, delete product
-    if (currentItem.quantity === 1) {
       // Server-first change
       const res = await fetch(`/api/cart/${id}`, {
-        method: "DELETE",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: "testUser",
+          quantity: newQuantity,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        toast.error(data.message);
+        return;
+      }
+
+      // Frontend => rerender cart page
+      setCartArr((prev) =>
+        prev.map((item) =>
+          item.product_id === id
+            ? {
+                ...item,
+                quantity: newQuantity,
+              }
+            : item,
+        ),
+      );
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to update quantity");
+    }
+  };
+
+  // Decrease current product quantity
+  const decreaseQty = async (id: number) => {
+    try {
+      // Find current product using id
+      const currentItem = cartArr.find((item) => item.product_id === id);
+
+      // Type narrowing: Make sure currentItem is not undefined
+      if (!currentItem) return;
+
+      // If currentItem quantity === 1, delete product
+      if (currentItem.quantity === 1) {
+        // Server-first change
+        const res = await fetch(`/api/cart/${id}`, {
+          method: "DELETE",
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          toast.error(data.message);
+          return;
+        }
+
+        // Frontend => delete product and rerender cart page
+        setCartArr((prev) => prev.filter((item) => item.product_id !== id));
+        toast.success(data.message);
+        return;
+      }
+
+      // If currentItem quantity > 1, adjust product quantity
+      // Calculate new quantity
+      const newQuantity = currentItem.quantity - 1;
+
+      // Server-first change
+      const res = await fetch(`/api/cart/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          quantity: newQuantity,
         }),
       });
 
@@ -96,75 +137,53 @@ export default function Page() {
         return;
       }
 
-      // Frontend => delete product and rerender cart page
-      setCartArr((prev) => prev.filter((item) => item.product_id !== id));
-      toast.success(data.message);
-      return;
+      // Frontend => update quantity and rerender cart page
+      setCartArr((prev) =>
+        prev.map((item) =>
+          item.product_id === id
+            ? {
+                ...item,
+                quantity: newQuantity,
+              }
+            : item,
+        ),
+      );
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to update quantity");
     }
-
-    // If currentItem quantity > 1, adjust product quantity
-    // Calculate new quantity
-    const newQuantity = currentItem.quantity - 1;
-
-    // Server-first change
-    const res = await fetch(`/api/cart/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        quantity: newQuantity,
-        username: "testUser",
-      }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      toast.error(data.message);
-      return;
-    }
-
-    // Frontend => update quantity and rerender cart page
-    setCartArr((prev) =>
-      prev.map((item) =>
-        item.product_id === id
-          ? {
-              ...item,
-              quantity: newQuantity,
-            }
-          : item,
-      ),
-    );
   };
 
   // Delete product when user click 'Delete' button
   const deleteItem = async (id: number) => {
-    // Frontend => request backend to delete product
-    const res = await fetch(`/api/cart/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: "testUser",
-      }),
-    });
+    try {
+      // Frontend => request backend to delete product
+      const res = await fetch(`/api/cart/${id}`, {
+        method: "DELETE",
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      toast.error(data.message);
-      return;
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      // Frontend delete product from the current cart
+      setCartArr((prev) => prev.filter((item) => item.product_id !== id));
+
+      // Print delete success message
+      toast.success(data.message);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete product");
     }
-
-    // Frontend delete product from the current cart
-    setCartArr((prev) => prev.filter((item) => item.product_id !== id));
-
-    // Print delete success message
-    toast.success(data.message);
   };
 
+  // Cart loading?
+  if (isLoading) {
+    return <p> Loading Cart...</p>;
+  }
   // User has no items in their cart
   if (cartArr.length === 0) {
     return <p>Your cart is empty!</p>;
