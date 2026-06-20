@@ -1,23 +1,46 @@
 import { NextResponse } from "next/server"; // Similar to res.json in Express
 import db from "@/lib/db";
 import type { ResultSetHeader } from "mysql2";
+import getUserIdFromToken from "@/lib/auth";
 
 // Update product quantity in user's cart using PATCH
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  // Get product id info from frontend
-  const { id } = await params;
-
-  // Get quantity and username from frontend
-  const { quantity, username } = await request.json();
-
   try {
+    // Get product id info from frontend
+    const { id } = await params;
+    const productId = Number(id);
+
+    if (!Number.isInteger(productId) || productId <= 0) {
+      return NextResponse.json(
+        { message: "Invalid product id" },
+        { status: 400 },
+      );
+    }
+    // Get quantity and username from frontend
+    const { quantity } = await request.json();
+
+    const isValidBody = Number.isInteger(quantity) && quantity > 0;
+
+    if (!isValidBody) {
+      return NextResponse.json(
+        { message: "Invalid json body" },
+        { status: 400 },
+      );
+    }
+    // Check if user has signed in
+    const userId = await getUserIdFromToken();
+
+    if (userId === null) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     // Request DB to change product quantity
     const [rows] = await db.query<ResultSetHeader>(
-      "UPDATE cart SET quantity = ? WHERE product_id = ? AND username= ?",
-      [quantity, id, username],
+      "UPDATE cart SET quantity = ? WHERE product_id = ? AND user_id= ?",
+      [quantity, productId, userId],
     );
 
     // Error handling
@@ -39,12 +62,12 @@ export async function PATCH(
     );
   } catch (err: unknown) {
     if (err instanceof Error) {
-      console.error(`POST /api/cart/${id} failed:`, err.message);
+      console.error("PATCH /api/cart/[id] failed:", err.message);
     } else {
-      console.error(`POST /api/cart/${id} failed:`, err);
+      console.error("PATCH /api/cart/$[id] failed:", err);
     }
     return NextResponse.json(
-      { message: "Fail to change product quantity" },
+      { message: "Failed to change product quantity" },
       { status: 500 },
     );
   }
@@ -52,18 +75,31 @@ export async function PATCH(
 
 // Delete product if quantity === 0
 export async function DELETE(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
   // Get id and username info from frontend
   const { id } = await params;
-  // request.json() is the body sent by frontend
-  const { username } = await request.json();
+  const productId = Number(id);
+
+  if (!Number.isInteger(productId) || productId <= 0) {
+    return NextResponse.json(
+      { message: "Invalid product id" },
+      { status: 400 },
+    );
+  }
+
+  // Check if user has signed in
+  const userId = await getUserIdFromToken();
+
+  if (userId === null) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
 
   try {
     const [rows] = await db.query<ResultSetHeader>(
-      "DELETE FROM cart WHERE product_id =? AND username=?",
-      [id, username],
+      "DELETE FROM cart WHERE product_id =? AND user_id=?",
+      [productId, userId],
     );
 
     // Error handling
@@ -83,12 +119,12 @@ export async function DELETE(
     );
   } catch (err: unknown) {
     if (err instanceof Error) {
-      console.error(`DELETE /api/cart/${id} failed:`, err.message);
+      console.error("DELETE /api/cart/[id] failed:", err.message);
     } else {
-      console.error(`DELETE /api/cart/${id} failed:`, err);
+      console.error("DELETE /api/cart/[id] failed:", err);
     }
     return NextResponse.json(
-      { message: "Fail to delete product" },
+      { message: "Failed to delete product" },
       { status: 500 },
     );
   }
