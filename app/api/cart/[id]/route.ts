@@ -64,7 +64,7 @@ export async function PATCH(
     if (err instanceof Error) {
       console.error("PATCH /api/cart/[id] failed:", err.message);
     } else {
-      console.error("PATCH /api/cart/$[id] failed:", err);
+      console.error("PATCH /api/cart/[id] failed:", err);
     }
     return NextResponse.json(
       { message: "Failed to change product quantity" },
@@ -92,6 +92,7 @@ export async function DELETE(
   // Check if user has signed in
   const userId = await getUserIdFromToken();
 
+  // N:
   if (userId === null) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
