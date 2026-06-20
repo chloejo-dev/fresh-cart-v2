@@ -64,7 +64,6 @@ export default function Page() {
 
     const data = await res.json();
 
-    console.log(data);
     // Error handling
     if (!res.ok) {
       setSignInErr(data.message);
