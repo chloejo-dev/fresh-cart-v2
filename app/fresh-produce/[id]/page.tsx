@@ -13,6 +13,14 @@ type Product = {
   quantity: number;
 };
 
+type GuestProduct = {
+  productId: number;
+  productName: string;
+  productPrice: number;
+  productPic: string;
+  quantity: number;
+};
+
 type cartStatus = "idle" | "updated" | "added" | "error" | "viewCart";
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -21,22 +29,44 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [cartStatus, setCartStatus] = useState<cartStatus>("idle");
+  const [isSignIn, setIsSignIn] = useState<boolean>(false);
 
   // Fetch/display single product data from DB
   useEffect(() => {
     async function fetchProduct() {
       try {
+        // Fetch product data
         const res = await fetch(`/api/fresh-produce/${id}`);
+        const data = await res.json();
 
-        // If res fails, throw error
-        // res.ok === true
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
+        setProduct(data.product);
+        setIsSignIn(data.isSignIn);
+
+        // Set product quantity to display
+        // User sign in?
+        // N:
+        if (data.isSignIn === false) {
+          // Cart exists in local storage?
+          const cart = localStorage.getItem("cart");
+
+          if (cart) {
+            // Y:
+            const existingCart = JSON.parse(cart);
+            // Current product exists in guest cart?
+            // Y: stored quantity, N: 1
+
+            const currentItem = existingCart.find(
+              (item: GuestProduct) => item.productId === Number(id),
+            );
+
+            if (currentItem) {
+              setQuantity(currentItem.quantity ?? 1);
+            }
+          }
+          return;
         }
 
-        const data = await res.json();
-        setProduct(data);
-        setQuantity(data.quantity ?? 1);
+        setQuantity(data.product.quantity ?? 1);
       } catch (err) {
         console.error("Error fetching products", err);
       }
@@ -49,7 +79,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     cartStatus === "added"
       ? "Successfully Added to Cart!"
       : cartStatus === "updated"
-        ? "Cart Successfully Updated!"
+        ? "Successfully Updated!"
         : cartStatus === "viewCart"
           ? "View Cart"
           : "Add to Cart";
@@ -82,41 +112,96 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   // When clicked, add or update this product to user's cart
   const addToCart = async () => {
-    try {
-      const res = await fetch("/api/cart", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+    // User sign in?
+    // Y => Store in DB
+    if (isSignIn) {
+      try {
+        const res = await fetch("/api/cart", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productId: product.product_id,
+            quantity,
+          }),
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to add product to cart.");
+        }
+
+        const data = await res.json();
+
+        if (data.action === "update") {
+          setCartStatus("updated");
+        } else if (data.action === "insert") {
+          setCartStatus("added");
+        }
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error("POST /api/cart failed:", err.message);
+        } else {
+          console.error("POST /api/cart failed:", err);
+        }
+        setCartStatus("error");
+      }
+    } else {
+      // N:
+      // Guest cart exists?
+      const cart = localStorage.getItem("cart");
+
+      // N:
+      // Create cart array
+      // Add current product to the array
+      // Store the array in localStorage
+      if (cart === null) {
+        const guestCart: GuestProduct[] = [];
+        guestCart.push({
           productId: product.product_id,
+          productName: product.product_name,
+          productPic: product.product_pic,
+          productPrice: product.product_price,
           quantity,
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to add product to cart.");
-      }
-
-      const data = await res.json();
-
-      if (data.action === "update") {
-        setCartStatus("updated");
-      } else if (data.action === "insert") {
+        });
+        localStorage.setItem("cart", JSON.stringify(guestCart));
         setCartStatus("added");
+        return;
       }
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error("GET /api/cart failed:", err.message);
+      // Y:
+      // Get the existing guest cart array
+      const existingGuestCart: GuestProduct[] = JSON.parse(cart);
+      // Current product exists in cart array?
+      const currentItemIndex = existingGuestCart.findIndex(
+        (item: GuestProduct) => item.productId === Number(id),
+      );
+      // N:
+      // Add current product to the array
+      // Store the updated array in localStorage
+      if (currentItemIndex === -1) {
+        existingGuestCart.push({
+          productId: product.product_id,
+          productName: product.product_name,
+          productPic: product.product_pic,
+          productPrice: product.product_price,
+          quantity: quantity,
+        });
+        setCartStatus("added");
       } else {
-        console.error("GET /api/cart failed:", err);
+        // Y: Update product quantity in guest cart
+        if (existingGuestCart[currentItemIndex].quantity !== quantity) {
+          existingGuestCart[currentItemIndex].quantity = quantity;
+          setCartStatus("updated");
+        } else {
+          setCartStatus("viewCart");
+        }
       }
-      setCartStatus("error");
+      localStorage.setItem("cart", JSON.stringify(existingGuestCart));
     }
   };
 
   return (
-    <>
+    <main>
       <div className={styles.detailPageContainer}>
         <div className={styles.linkContainer}>
           <Link href='/fresh-produce' className={styles.link}>
@@ -167,6 +252,6 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           </div>
         </div>
       </div>
-    </>
+    </main>
   );
 }
