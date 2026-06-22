@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { parse } from "path";
 
 interface CartItem {
   product_name: string;
@@ -17,18 +18,34 @@ interface CartItem {
 export default function Page() {
   const [cartArr, setCartArr] = useState<CartItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isSignIn, setIsSignIn] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
         const res = await fetch("/api/cart");
         const data = await res.json();
+        // User sign in?
+        // N: Guest
+        if (res.status === 401) {
+          // Cart exists in local storage?
+          const guestCart = localStorage.getItem("cart");
 
+          if (guestCart) {
+            setCartArr(JSON.parse(guestCart));
+          }
+
+          setIsSignIn(false);
+          return;
+        }
+        // Other error handling
         if (!res.ok) {
           toast.error(data.message);
           return;
         }
+        // Y: Store user's cart data
         setCartArr(data);
+        setIsSignIn(true);
       } catch (err) {
         console.error(err);
         toast.error("Failed to load cart");
@@ -40,64 +57,203 @@ export default function Page() {
     fetchCartItems();
   }, []);
 
-  // Increase current product quantity
+  // Increase current item quantity
   const increaseQty = async (id: number) => {
-    try {
-      // Find product current product using id
-      const currentItem = cartArr.find((item) => item.product_id === id);
+    // Find product current item using id
+    const currentItem = cartArr.find((item) => item.product_id === id);
 
-      // Type narrowing: Make sure currentItem is not undefined
-      if (!currentItem) return;
+    // Type narrowing: Make sure currentItem is not undefined
+    if (!currentItem) return;
 
-      // Calculate new quantity
-      const newQuantity = currentItem.quantity + 1;
+    // Calculate new quantity
+    const newQuantity = currentItem.quantity + 1;
 
-      // Server-first change
-      const res = await fetch(`/api/cart/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          quantity: newQuantity,
-        }),
-      });
+    // User sign in?
+    // Y:
+    if (isSignIn) {
+      try {
+        // Ask server to update quantity => Server-first change
+        const res = await fetch(`/api/cart/${id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            quantity: newQuantity,
+          }),
+        });
 
-      if (!res.ok) {
-        const data = await res.json();
-        toast.error(data.message);
+        if (!res.ok) {
+          const data = await res.json();
+          toast.error(data.message);
+          return;
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to update quantity");
         return;
       }
+    } else {
+      // N: Update guest cart
+      // Fetch existing guest cart
+      const guestCart = localStorage.getItem("cart");
+      // Find the current item index
+      if (guestCart) {
+        const parsedGuestCart: CartItem[] = JSON.parse(guestCart);
+        const currentItemIndex = parsedGuestCart.findIndex(
+          (item: CartItem) => item.product_id === id,
+        );
 
-      // Frontend => rerender cart page
-      setCartArr((prev) =>
-        prev.map((item) =>
-          item.product_id === id
-            ? {
-                ...item,
-                quantity: newQuantity,
-              }
-            : item,
-        ),
-      );
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to update quantity");
+        // Error handling: Current item not in guest cart
+        if (currentItemIndex === -1) {
+          return;
+        }
+        // Update with a new quantity
+        parsedGuestCart[currentItemIndex].quantity = newQuantity;
+        // Store updated guest cart in local storage
+        localStorage.setItem("cart", JSON.stringify(parsedGuestCart));
+      }
+    }
+    // Frontend => rerender cart page
+    setCartArr((prev) =>
+      prev.map((item) =>
+        item.product_id === id
+          ? {
+              ...item,
+              quantity: newQuantity,
+            }
+          : item,
+      ),
+    );
+  };
+
+  // Decrease current item quantity
+  const decreaseQty = async (id: number) => {
+    // Find current item using id
+    const currentItem = cartArr.find((item) => item.product_id === id);
+
+    // Type narrowing: Make sure currentItem is not undefined
+    if (!currentItem) return;
+
+    // User sign in?
+    // Y:
+    if (isSignIn) {
+      try {
+        // If currentItem quantity === 1, delete current item
+        if (currentItem.quantity === 1) {
+          // Server-first change
+          const res = await fetch(`/api/cart/${id}`, {
+            method: "DELETE",
+          });
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            toast.error(data.message);
+            return;
+          }
+
+          // Frontend => delete current item and rerender cart page
+          setCartArr((prev) => prev.filter((item) => item.product_id !== id));
+          toast.success(data.message);
+          return;
+        }
+
+        // If currentItem quantity > 1, adjust product quantity
+        // Calculate new quantity
+        const newQuantity = currentItem.quantity - 1;
+
+        // Server-first change
+        const res = await fetch(`/api/cart/${id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            quantity: newQuantity,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          toast.error(data.message);
+          return;
+        }
+
+        // Frontend => Update quantity and re-render cart page
+        setCartArr((prev) =>
+          prev.map((item) =>
+            item.product_id === id
+              ? {
+                  ...item,
+                  quantity: newQuantity,
+                }
+              : item,
+          ),
+        );
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to update quantity");
+        return;
+      }
+    } else {
+      // N:
+      // Get guest cart from local storage
+      const guestCart = localStorage.getItem("cart");
+
+      if (guestCart) {
+        const parsedGuestCart: CartItem[] = JSON.parse(guestCart);
+        if (currentItem.quantity === 1) {
+          // Delete current item
+          const newGuestCart = parsedGuestCart.filter(
+            (item: CartItem) => item.product_id !== id,
+          );
+          // Store new guest cart in local storage
+          localStorage.setItem("cart", JSON.stringify(newGuestCart));
+
+          // Frontend => Delete current item and re-render cart page
+          setCartArr((prev) => prev.filter((item) => item.product_id !== id));
+        } else {
+          // Calculate new quantity
+          const newQuantity = currentItem.quantity - 1;
+
+          // Update guest cart with new quantity
+          const currentItemIndex = parsedGuestCart.findIndex(
+            (item: CartItem) => item.product_id === id,
+          );
+
+          if (currentItemIndex === -1) {
+            return;
+          }
+
+          parsedGuestCart[currentItemIndex].quantity = newQuantity;
+
+          // Store updated guest cart in local storage
+          localStorage.setItem("cart", JSON.stringify(parsedGuestCart));
+          // Frontend re-rendering
+          setCartArr((prev) =>
+            prev.map((item) =>
+              item.product_id === id
+                ? {
+                    ...item,
+                    quantity: newQuantity,
+                  }
+                : item,
+            ),
+          );
+        }
+      }
     }
   };
 
-  // Decrease current product quantity
-  const decreaseQty = async (id: number) => {
-    try {
-      // Find current product using id
-      const currentItem = cartArr.find((item) => item.product_id === id);
-
-      // Type narrowing: Make sure currentItem is not undefined
-      if (!currentItem) return;
-
-      // If currentItem quantity === 1, delete product
-      if (currentItem.quantity === 1) {
-        // Server-first change
+  // Delete current item when user click 'Delete' button
+  const deleteItem = async (id: number) => {
+    // User sign in?
+    // Y:
+    if (isSignIn) {
+      try {
+        // Frontend => Request backend to delete product
         const res = await fetch(`/api/cart/${id}`, {
           method: "DELETE",
         });
@@ -109,74 +265,34 @@ export default function Page() {
           return;
         }
 
-        // Frontend => delete product and rerender cart page
+        // Frontend => Delete current item from user's cart
         setCartArr((prev) => prev.filter((item) => item.product_id !== id));
+
+        // Print delete success message
         toast.success(data.message);
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to delete product");
         return;
       }
+    } else {
+      // N:
+      // Get guest cart from local storage
+      const guestCart = localStorage.getItem("cart");
+      // Parse guest cart to access guest cart
+      if (guestCart) {
+        const parsedGuestCart: CartItem[] = JSON.parse(guestCart);
 
-      // If currentItem quantity > 1, adjust product quantity
-      // Calculate new quantity
-      const newQuantity = currentItem.quantity - 1;
-
-      // Server-first change
-      const res = await fetch(`/api/cart/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          quantity: newQuantity,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.message);
-        return;
+        // Delete current item from the cart
+        const newGuestCart = parsedGuestCart.filter(
+          (item: CartItem) => item.product_id !== id,
+        );
+        // Store updated cart in local storage
+        localStorage.setItem("cart", JSON.stringify(newGuestCart));
       }
 
-      // Frontend => update quantity and rerender cart page
-      setCartArr((prev) =>
-        prev.map((item) =>
-          item.product_id === id
-            ? {
-                ...item,
-                quantity: newQuantity,
-              }
-            : item,
-        ),
-      );
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to update quantity");
-    }
-  };
-
-  // Delete product when user click 'Delete' button
-  const deleteItem = async (id: number) => {
-    try {
-      // Frontend => request backend to delete product
-      const res = await fetch(`/api/cart/${id}`, {
-        method: "DELETE",
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.message);
-        return;
-      }
-
-      // Frontend delete product from the current cart
+      // Frontend => Delete current item from guest cart
       setCartArr((prev) => prev.filter((item) => item.product_id !== id));
-
-      // Print delete success message
-      toast.success(data.message);
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to delete product");
     }
   };
 
