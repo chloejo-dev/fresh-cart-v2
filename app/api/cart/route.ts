@@ -17,7 +17,7 @@ interface ExistingCartItemRow extends RowDataPacket {
 // Get all items from user's cart
 export async function GET() {
   try {
-    // Check if user has signed in
+    // User sign in?
     const userId = await getUserIdFromToken();
 
     // N:
@@ -64,12 +64,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const { productId, quantity } = await request.json();
-
+    const { product_id, quantity } = await request.json();
+    console.log(product_id, quantity);
     // Error handling
     const isValidBody =
-      Number.isInteger(productId) &&
-      productId > 0 &&
+      Number.isInteger(product_id) &&
+      product_id > 0 &&
       Number.isInteger(quantity) &&
       quantity > 0;
 
@@ -83,14 +83,14 @@ export async function POST(request: Request) {
     // Check if product is already in user's cart
     const [rows] = await db.query<ExistingCartItemRow[]>(
       "SELECT product_id FROM cart WHERE product_id= ? AND user_id= ?",
-      [productId, userId],
+      [product_id, userId],
     );
 
     // Yes -> Update product quantity
     if (rows.length > 0) {
       await db.query(
         "UPDATE cart SET quantity=? WHERE product_id= ? AND user_id= ?",
-        [quantity, productId, userId],
+        [quantity, product_id, userId],
       );
       return NextResponse.json(
         {
@@ -104,7 +104,7 @@ export async function POST(request: Request) {
     else {
       await db.query(
         "INSERT INTO cart (product_id, quantity, user_id) VALUES (?, ?, ?)",
-        [productId, quantity, userId],
+        [product_id, quantity, userId],
       );
       return NextResponse.json(
         {
