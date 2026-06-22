@@ -14,10 +14,10 @@ type Product = {
 };
 
 type GuestProduct = {
-  productId: number;
-  productName: string;
-  productPrice: number;
-  productPic: string;
+  product_id: number;
+  product_name: string;
+  product_price: number;
+  product_pic: string;
   quantity: number;
 };
 
@@ -56,7 +56,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
             // Y: stored quantity, N: 1
 
             const currentItem = existingCart.find(
-              (item: GuestProduct) => item.productId === Number(id),
+              (item: GuestProduct) => item.product_id === Number(id),
             );
 
             if (currentItem) {
@@ -122,7 +122,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            productId: product.product_id,
+            product_id: product.product_id,
             quantity,
           }),
         });
@@ -158,10 +158,10 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       if (cart === null) {
         const guestCart: GuestProduct[] = [];
         guestCart.push({
-          productId: product.product_id,
-          productName: product.product_name,
-          productPic: product.product_pic,
-          productPrice: product.product_price,
+          product_id: product.product_id,
+          product_name: product.product_name,
+          product_pic: product.product_pic,
+          product_price: product.product_price,
           quantity,
         });
         localStorage.setItem("cart", JSON.stringify(guestCart));
@@ -173,17 +173,17 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       const existingGuestCart: GuestProduct[] = JSON.parse(cart);
       // Current product exists in cart array?
       const currentItemIndex = existingGuestCart.findIndex(
-        (item: GuestProduct) => item.productId === Number(id),
+        (item: GuestProduct) => item.product_id === Number(id),
       );
       // N:
       // Add current product to the array
       // Store the updated array in localStorage
       if (currentItemIndex === -1) {
         existingGuestCart.push({
-          productId: product.product_id,
-          productName: product.product_name,
-          productPic: product.product_pic,
-          productPrice: product.product_price,
+          product_id: product.product_id,
+          product_name: product.product_name,
+          product_pic: product.product_pic,
+          product_price: product.product_price,
           quantity: quantity,
         });
         setCartStatus("added");
