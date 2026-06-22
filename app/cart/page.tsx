@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { parse } from "path";
 
 interface CartItem {
   product_name: string;
