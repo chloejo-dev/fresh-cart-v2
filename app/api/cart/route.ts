@@ -65,7 +65,7 @@ export async function POST(request: Request) {
     }
 
     const { product_id, quantity } = await request.json();
-    console.log(product_id, quantity);
+
     // Error handling
     const isValidBody =
       Number.isInteger(product_id) &&
