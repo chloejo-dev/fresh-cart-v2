@@ -17,7 +17,7 @@ export default function Footer() {
           <span>Fresh Cart</span>
         </div>
         <div className={styles.links}>
-          <Link href='/freshProduce'>Fresh Produce</Link>
+          <Link href='/fresh-produce'>Fresh Produce</Link>
           <Link href='/meat'>Meat</Link>
           <Link href='/seafood'>Seafood</Link>
           <Link href='/dairy'>Dairy</Link>
