@@ -1,3 +1,10 @@
+.cartPage {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 10rem;
+}
+
 .cartContainer {
     display: flex;
     flex-direction: column;
@@ -11,7 +18,7 @@
     /* align-items: center -> align the image and info container in the middle*/
     align-items: center;
     margin-bottom: 100px;
-    gap: 50px;
+    gap: 5rem;
     width: 100%;
     max-width: 850px;
 }
@@ -27,6 +34,7 @@
 .productDescContainer {
     display: flex;
     justify-content: space-between;
+    gap: 10rem;
 
 }
 
@@ -47,4 +55,33 @@
 
 .emptyCartMessage {
     font-size: 2rem;
+}
+
+.subtotalContainer {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10rem;
+    gap: 0.5rem;
+
+}
+
+.subtotalText {
+    font-weight: 500;
+}
+
+.checkOutButton {
+    font-family: inherit;
+    font-size: 1rem;
+    background-color: var(--accent-orange);
+    box-shadow: 0 4px 15px rgba(174, 173, 171, 0.4);
+    color: white !important;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 20px;
+    transition: opacity 0.2s;
+    cursor: pointer;
+}
+
+.checkOutButton:hover {
+    opacity: 0.8;
 }
