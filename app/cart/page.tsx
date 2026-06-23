@@ -295,6 +295,10 @@ export default function Page() {
     }
   };
 
+  const handleCheckOut = () => {
+    console.log("Checkout button clicked");
+  };
+
   // Cart loading?
   if (isLoading) {
     return (
@@ -312,8 +316,14 @@ export default function Page() {
     );
   }
 
+  // Iterate over cart array and calculate subtotal
+  const subtotal = cartArr.reduce(
+    (currenTotal, item) => currenTotal + item.product_price * item.quantity,
+    0,
+  );
+
   return (
-    <main>
+    <main className={styles.cartPage}>
       <div className={styles.cartContainer}>
         {cartArr.map((item) => (
           <div key={item.product_id} className={styles.productRow}>
@@ -360,6 +370,14 @@ export default function Page() {
             </div>
           </div>
         ))}
+      </div>
+      <div className={styles.subtotalContainer}>
+        <span className={styles.subtotalText}>
+          Subtotal: ${subtotal.toFixed(2)}
+        </span>
+        <button className={styles.checkOutButton} onClick={handleCheckOut}>
+          Check Out
+        </button>
       </div>
     </main>
   );
