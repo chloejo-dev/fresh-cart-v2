@@ -297,11 +297,19 @@ export default function Page() {
 
   // Cart loading?
   if (isLoading) {
-    return <p> Loading Cart...</p>;
+    return (
+      <main className={styles.centeredPage}>
+        <p className={styles.loadingMessage}>Loading Cart...</p>
+      </main>
+    );
   }
   // User has no items in their cart
   if (cartArr.length === 0) {
-    return <p>Your cart is empty!</p>;
+    return (
+      <main className={styles.centeredPage}>
+        <p className={styles.emptyCartMessage}>Your cart is empty!</p>
+      </main>
+    );
   }
 
   return (

@@ -33,3 +33,18 @@
 .btnContainer {
     margin-top: 20px;
 }
+
+.centeredPage {
+    min-height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loadingMessage {
+    font-size: 1.5rem;
+}
+
+.emptyCartMessage {
+    font-size: 2rem;
+}
