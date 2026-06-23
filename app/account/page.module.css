@@ -52,3 +52,14 @@
     color: var(--primary-green);
     border: 1px solid var(--primary-green);
 }
+
+.centeredPage {
+    min-height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loadingMessage {
+    font-size: 1.5rem;
+}

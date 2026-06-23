@@ -37,7 +37,11 @@ export default function Page() {
   }, [router]);
 
   if (!currentUser) {
-    return <p>Please sign in...</p>;
+    return (
+      <main className={styles.centeredPage}>
+        <p className={styles.loadingMessage}>Please sign in...</p>
+      </main>
+    );
   }
 
   return (
