@@ -19,14 +19,12 @@ export async function GET(
       );
     }
 
-    // Check if user has signed in. If yes, show product quantity stored in user's cart
+    // User sign in?
+    // Y => show product quantity stored in user's cart
     const userId = await getUserIdFromToken();
+    const isSignIn = userId !== null;
 
-    // N:
-    if (userId === null) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
-    // Check if product in user cart
+    // Fetch product data
     const [rows] = await db.query<RowDataPacket[]>(
       `SELECT
         products.product_id,
@@ -45,7 +43,7 @@ export async function GET(
 
     const product = rows[0];
 
-    // Explicit error handling
+    // Explicit error handling: Product not found
     if (!product) {
       return NextResponse.json(
         { message: "Product not found" },
@@ -53,7 +51,8 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(product);
+    // Send product data and sign in status to client
+    return NextResponse.json({ product, isSignIn });
   } catch (err: unknown) {
     if (err instanceof Error) {
       console.error(`GET /api/freshProduce/[id] failed`, err.message);
