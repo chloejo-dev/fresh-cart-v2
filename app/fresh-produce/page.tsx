@@ -57,7 +57,11 @@ export default function Page() {
   // isLoading(true) = request in progress
   // isLoading(false) = request finished (success or error)
   if (isLoading) {
-    return <p className={styles.loading}>Loading products...</p>;
+    return (
+      <main className={styles.centeredPage}>
+        <p className={styles.loadingMessage}>Loading products...</p>
+      </main>
+    );
   }
 
   // Handling fetching error

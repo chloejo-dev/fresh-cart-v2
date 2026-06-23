@@ -1,8 +1,3 @@
-.loading {
-    text-align: center;
-    font-size: 25px;
-}
-
 .productsContainer {
     display: flex;
     flex-direction: column;
@@ -27,4 +22,15 @@
 .singleProductContainer a {
     color: var(--text-dark);
     text-decoration: none;
+}
+
+.centeredPage {
+    min-height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loadingMessage {
+    font-size: 1.5rem;
 }
