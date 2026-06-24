@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"; // Similar to res.json in Express
 import db from "@/lib/db";
-import type { RowDataPacket } from "mysql2";
+import { ResultSetHeader, type RowDataPacket } from "mysql2";
 import getUserIdFromToken from "@/lib/auth";
 
 interface CartItem extends RowDataPacket {
@@ -102,10 +102,18 @@ export async function POST(request: Request) {
     }
     // No -> Insert product info to user's cart
     else {
-      await db.query(
+      const [res] = await db.query<ResultSetHeader>(
         "INSERT INTO cart (product_id, quantity, user_id) VALUES (?, ?, ?)",
         [product_id, quantity, userId],
       );
+
+      if (res.affectedRows === 0) {
+        return NextResponse.json(
+          { message: "POST /api/cart failed" },
+          { status: 400 },
+        );
+      }
+
       return NextResponse.json(
         {
           action: "insert",
