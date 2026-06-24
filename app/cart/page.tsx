@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
+import { useRouter } from "next/navigation";
 interface CartItem {
   product_name: string;
   product_id: number;
@@ -18,6 +18,8 @@ export default function Page() {
   const [cartArr, setCartArr] = useState<CartItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSignIn, setIsSignIn] = useState<boolean>(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -296,7 +298,15 @@ export default function Page() {
   };
 
   const handleCheckOut = () => {
-    console.log("Checkout button clicked");
+    console.log("User sign in? ", isSignIn);
+    // User sign in?
+    // N: Redirect to sign in page
+    if (!isSignIn) {
+      // Checkout button -> sign-in page -> redirect to checkout page
+      router.push("/sign-in?redirect=/checkout");
+    }
+
+    // Y: Proceed with checkout
   };
 
   // Cart loading?
@@ -376,7 +386,7 @@ export default function Page() {
           Subtotal: ${subtotal.toFixed(2)}
         </span>
         <button className={styles.checkOutButton} onClick={handleCheckOut}>
-          Check Out
+          Proceed to Check Out
         </button>
       </div>
     </main>
