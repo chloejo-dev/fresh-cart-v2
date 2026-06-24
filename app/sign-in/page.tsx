@@ -2,12 +2,16 @@
 import Link from "next/link";
 import styles from "./page.module.css";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Page() {
   const [username, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [signInErr, setSignInErr] = useState<string>("");
+
+  // Checkout button -> sign-in page -> redirect to checkout page
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
 
   let usernameError = ""; // derived value (username)
   let passwordError = ""; // derived value (password)
@@ -64,14 +68,52 @@ export default function Page() {
 
     const data = await res.json();
 
-    // Error handling
+    // Sign in fail?
+    // Y:
     if (!res.ok) {
       setSignInErr(data.message);
       return;
     }
 
-    // If sign in is a success, redirect to the website main
-    router.push("/");
+    // N => Get guest cart from local storage to merge with user's existing cart
+    // Guest cart?
+    const guestCart = localStorage.getItem("cart");
+
+    // Y:
+    if (guestCart) {
+      try {
+        const parsedGuestCart = JSON.parse(guestCart);
+
+        // Send guest cart to make a POST request
+        if (Array.isArray(parsedGuestCart) && parsedGuestCart.length > 0) {
+          // Call cart/merge API
+          const res = await fetch("/api/cart/merge", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              guestCart: parsedGuestCart,
+            }),
+          });
+
+          // Merge fail?
+          if (!res.ok) {
+            throw new Error("Failed to merge guest cart with user's cart.");
+          }
+          // Delete guest cart from local storage
+          localStorage.removeItem("cart");
+        }
+      } catch (error) {
+        console.error(error);
+        // Let user know if merge fails
+        setSignInErr("Failed to merge guest cart with your account.");
+        return;
+      }
+    }
+
+    // If sign in is a success, redirect to the website main or checkout page
+    router.push(redirect ?? "/");
   };
 
   return (
