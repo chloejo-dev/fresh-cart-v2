@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     const { username, email, password } = await request.json();
 
     // Backend validation:
-    // Type validation: username, email, password are strings?
+    // Type validation: username, email, password => strings?
     if (
       typeof username !== "string" ||
       typeof email !== "string" ||
@@ -89,14 +89,13 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check if username is already in users table using the info received from frontend
-    // Yes, send back error message
+    // Username already exists?
     const [existingUsers] = await db.query<RowDataPacket[]>(
       "SELECT user_id, username FROM users WHERE username = ?",
       [normalizedUsername],
     );
 
-    // If username is in users table, inform frontend
+    // Y => Return error message
     if (existingUsers.length > 0) {
       return NextResponse.json(
         {
@@ -108,10 +107,11 @@ export async function POST(request: Request) {
       );
     }
 
-    // No, add the user info to DB
+    // N:
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Add user info to DB
     const [result] = await db.query<ResultSetHeader>(
       "INSERT INTO users (username, email, hashed_password) VALUES (?, ?, ?)",
       [normalizedUsername, normalizedEmail, hashedPassword],
@@ -129,7 +129,7 @@ export async function POST(request: Request) {
     const userId = result.insertId;
 
     // Y:
-    // Create a sign-in session
+    // Create sign-in session
     // JWT
     const token = jwt.sign(
       {
