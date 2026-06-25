@@ -298,12 +298,11 @@ export default function Page() {
   };
 
   const handleCheckOut = () => {
-    console.log("User sign in? ", isSignIn);
     // User sign in?
     // N: Redirect to sign in page
     if (!isSignIn) {
       // Checkout button -> sign-in page -> redirect to checkout page
-      router.push("/sign-in?redirect=/checkout");
+      router.push("/sign-in?redirect=checkout");
     }
 
     // Y: Proceed with checkout
