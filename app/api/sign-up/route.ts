@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"; // Similar to res.json in Express
 import db from "@/lib/db";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
 
 export async function POST(request: Request) {
   try {
@@ -115,12 +117,40 @@ export async function POST(request: Request) {
       [normalizedUsername, normalizedEmail, hashedPassword],
     );
 
+    // User successfully created?
+    // N:
     if (result.affectedRows !== 1) {
       return NextResponse.json(
         { message: "Failed to create user" },
         { status: 500 },
       );
     }
+
+    const userId = result.insertId;
+
+    // Y:
+    // Create a sign-in session
+    // JWT
+    const token = jwt.sign(
+      {
+        userId,
+      },
+      process.env.JWT_SECRET!,
+      {
+        expiresIn: "1d",
+      },
+    );
+
+    // Store JWT in cookies
+    const cookieStore = await cookies();
+
+    cookieStore.set("auth_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24,
+    });
 
     return NextResponse.json(
       {
