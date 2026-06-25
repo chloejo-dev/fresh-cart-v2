@@ -4,19 +4,28 @@ import styles from "./page.module.css";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+const redirectMap = {
+  checkout: "/checkout",
+} as const;
+
 export default function Page() {
   const [username, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [signInErr, setSignInErr] = useState<string>("");
 
   // Checkout button -> sign-in page -> redirect to checkout page
+  const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
 
+  // Validate redirect route
+  const safeRedirect =
+    redirect && redirect in redirectMap
+      ? redirectMap[redirect as keyof typeof redirectMap]
+      : "/";
+
   let usernameError = ""; // derived value (username)
   let passwordError = ""; // derived value (password)
-
-  const router = useRouter();
 
   // Real-time validation for UX: username, password
   // required attribute: prevent any empty input fields
@@ -113,7 +122,7 @@ export default function Page() {
     }
 
     // If sign in is a success, redirect to the website main or checkout page
-    router.push(redirect ?? "/");
+    router.push(safeRedirect);
   };
 
   return (
@@ -122,8 +131,9 @@ export default function Page() {
         <div className={styles.signInContainer}>
           <div className={styles.inputContainer}>
             <div className={styles.formGroup}>
-              <label>Username:</label>
+              <label htmlFor='username'>Username:</label>
               <input
+                id='username'
                 type='text'
                 name='username'
                 required
@@ -131,8 +141,9 @@ export default function Page() {
                 onChange={(e) => setUserName(e.target.value)}
               ></input>
               {usernameError && <p>{usernameError}</p>}
-              <label>Password:</label>
+              <label htmlFor='password'>Password:</label>
               <input
+                id='password'
                 type='password'
                 name='password'
                 required
