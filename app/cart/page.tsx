@@ -297,7 +297,7 @@ export default function Page() {
     }
   };
 
-  const handleCheckOut = () => {
+  const handleCheckout = () => {
     // User sign in?
     // N: Redirect to sign in page
     if (!isSignIn) {
@@ -384,7 +384,7 @@ export default function Page() {
         <span className={styles.subtotalText}>
           Subtotal: ${subtotal.toFixed(2)}
         </span>
-        <button className={styles.checkOutButton} onClick={handleCheckOut}>
+        <button className={styles.checkOutButton} onClick={handleCheckout}>
           Proceed to Check Out
         </button>
       </div>
