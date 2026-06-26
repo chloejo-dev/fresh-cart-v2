@@ -306,6 +306,7 @@ export default function Page() {
     }
 
     // Y: Proceed with checkout
+    router.push("/checkout");
   };
 
   // Cart loading?
