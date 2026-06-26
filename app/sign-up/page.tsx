@@ -97,7 +97,7 @@ export default function Page() {
     }
 
     // Make a POST request to backend with user information
-    const res = await fetch("/api/sign-up", {
+    const signUpRes = await fetch("/api/sign-up", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -110,10 +110,10 @@ export default function Page() {
     });
 
     // Get response from server
-    const data = await res.json();
+    const data = await signUpRes.json();
 
     // Error handling
-    if (!res.ok) {
+    if (!signUpRes.ok) {
       setSubmitError(data.message);
       return;
     }
