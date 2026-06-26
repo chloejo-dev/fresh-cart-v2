@@ -118,7 +118,32 @@ export default function Page() {
       return;
     }
 
-    
+    // Guest cart exists?
+    // Y: Get guest cart data from local storage
+    const guestCart = localStorage.getItem("cart");
+
+    if (guestCart) {
+      try {
+        const parsedGuestCart = JSON.parse(guestCart);
+        // Make sure guest cart is not empty
+        if (Array.isArray(parsedGuestCart) && parsedGuestCart.length > 0) {
+          // Send it to cart/merge API
+          const mergeRes = await fetch("/api/cart/merge", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ guestCart: parsedGuestCart }),
+          });
+          if (mergeRes.ok) {
+            localStorage.removeItem("cart");
+          } else {
+            console.error("Failed to merge guest cart");
+          }
+        }
+      } catch (err: unknown) {
+        console.error(err);
+      }
+    }
+
     // Redirect page after sign-up
     router.push(safeRedirect);
   };
