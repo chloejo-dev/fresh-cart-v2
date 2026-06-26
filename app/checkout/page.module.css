@@ -1,0 +1,40 @@
+.checkoutPage {
+    display: flex;
+    justify-content: center;
+    min-height: 60vh;
+    background-color: red;
+    gap: 2rem;
+}
+
+.orderDetails {
+    width: 60%;
+    background-color: aquamarine;
+    padding: 2rem;
+}
+
+.orderSummary {
+    padding: 2rem;
+}
+
+.orderSummaryDetails {
+    display: flex;
+    flex-direction: column;
+}
+
+.orderSummaryDetails p {
+    margin: 0;
+}
+
+.orderButton {
+    font-family: inherit;
+    background-color: var(--accent-orange);
+    color: white !important;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    transition: opacity 0.2s;
+}
+
+.orderButton:hover {
+    opacity: 0.7;
+}
