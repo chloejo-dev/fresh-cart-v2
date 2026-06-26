@@ -3,10 +3,7 @@ import Link from "next/link";
 import styles from "./page.module.css";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-
-const redirectMap = {
-  checkout: "/checkout",
-} as const;
+import { redirectMap } from "@/lib/redirect";
 
 export default function Page() {
   const [username, setUserName] = useState<string>("");
@@ -64,7 +61,7 @@ export default function Page() {
     }
 
     // Frontend makes a "POST" request only when the provided info is accurate
-    const res = await fetch("/api/sign-in", {
+    const signInRes = await fetch("/api/sign-in", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -75,11 +72,11 @@ export default function Page() {
       }),
     });
 
-    const data = await res.json();
+    const data = await signInRes.json();
 
     // Sign in fail?
     // Y:
-    if (!res.ok) {
+    if (!signInRes.ok) {
       setSignInErr(data.message);
       return;
     }
@@ -96,7 +93,7 @@ export default function Page() {
         // Send guest cart to make a POST request
         if (Array.isArray(parsedGuestCart) && parsedGuestCart.length > 0) {
           // Call cart/merge API
-          const res = await fetch("/api/cart/merge", {
+          const mergeRes = await fetch("/api/cart/merge", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -107,7 +104,7 @@ export default function Page() {
           });
 
           // Merge fail?
-          if (!res.ok) {
+          if (!mergeRes.ok) {
             throw new Error("Failed to merge guest cart with user's cart.");
           }
           // Delete guest cart from local storage
@@ -159,7 +156,11 @@ export default function Page() {
           </button>
           <div className={styles.signUpContainer}>
             <span>Don&apos;t have an account?</span>
-            <Link href='/sign-up'>Sign Up</Link>
+            <Link
+              href={redirect ? `/sign-up?redirect=${redirect}` : "/sign-up"}
+            >
+              Sign Up
+            </Link>
           </div>
         </div>
       </form>
