@@ -1,13 +1,23 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
+import { redirectMap } from "@/lib/redirect";
 
 export default function Page() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [submitError, setSubmitError] = useState<string>("");
+
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
+
+  // Validate redirect route
+  const safeRedirect =
+    redirect && redirect in redirectMap
+      ? redirectMap[redirect as keyof typeof redirectMap]
+      : "/";
 
   let inputPasswordError = "";
   let reEnteredPasswordError = "";
@@ -108,8 +118,9 @@ export default function Page() {
       return;
     }
 
-    // If form submission is successful, redirect to sign in page
-    router.push("/sign-in");
+    
+    // Redirect page after sign-up
+    router.push(safeRedirect);
   };
 
   return (
