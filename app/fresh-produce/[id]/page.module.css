@@ -29,13 +29,13 @@
     margin-left: 50px;
 }
 
-.btnContainer {
+.buttonContainer {
     display: flex;
     gap: 5px;
     padding: 5px;
 }
 
-.cartBtn {
+.cartButton {
     font-family: inherit;
     color: white;
     background-color: var(--primary-green);
@@ -46,7 +46,7 @@
     transition: opacity 0.2s;
 }
 
-.buyBtn {
+.buyButton {
     font-family: inherit;
     color: white;
     background-color: var(--vivid-green);
@@ -58,8 +58,8 @@
 
 }
 
-.cartBtn:hover,
-.buyBtn:hover {
+.cartButton:hover,
+.buyButton:hover {
     opacity: 0.7;
 }
 

@@ -75,7 +75,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   }, [id]);
 
   // Update cart button text according to cart status
-  const cartBtnText =
+  const cartButtonText =
     cartStatus === "added"
       ? "Successfully Added to Cart!"
       : cartStatus === "updated"
@@ -236,18 +236,18 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                 +
               </button>
             </div>
-            <div className={styles.btnContainer}>
+            <div className={styles.buttonContainer}>
               {cartStatus === "viewCart" ? (
                 <Link href='/cart' className={styles.cartLink}>
                   View Cart
                 </Link>
               ) : (
-                <button className={styles.cartBtn} onClick={addToCart}>
-                  {cartBtnText}
+                <button className={styles.cartButton} onClick={addToCart}>
+                  {cartButtonText}
                 </button>
               )}
 
-              <button className={styles.buyBtn}>Buy Now</button>
+              <button className={styles.buyButton}>Buy Now</button>
             </div>
           </div>
         </div>
