@@ -145,7 +145,7 @@ export default function Page() {
             </div>
             {signInErr && <p>{signInErr}</p>}
           </div>
-          <button type='submit' className={styles.signInBtn}>
+          <button type='submit' className={styles.signInButton}>
             Sign In
           </button>
           <div className={styles.signUpContainer}>
