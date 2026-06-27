@@ -58,7 +58,7 @@
     color: var(--primary-green);
 }
 
-.authBtn {
+.authButton {
     font-family: inherit;
     background-color: var(--primary-green);
     color: white !important;
@@ -68,7 +68,7 @@
     transition: opacity 0.2s;
 }
 
-.authBtn:hover {
+.authButton:hover {
     opacity: 0.7;
 }
 

@@ -67,11 +67,11 @@ export default function Header() {
             <Link href='/reorder'>Reorder</Link>
             <Link href='/account'>Account</Link>
             {isSignIn ? (
-              <button className={styles.authBtn} onClick={handleSignOut}>
+              <button className={styles.authButton} onClick={handleSignOut}>
                 Sign Out
               </button>
             ) : (
-              <Link href='/sign-in' className={styles.authBtn}>
+              <Link href='/sign-in' className={styles.authButton}>
                 Sign In
               </Link>
             )}
