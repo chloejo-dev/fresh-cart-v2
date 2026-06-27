@@ -197,7 +197,7 @@ export default function Page() {
           {reEnteredPasswordError && <p>{reEnteredPasswordError}</p>}
         </div>
         <div className={styles.buttonContainer}>
-          <button type='submit' className={styles.submitBtn}>
+          <button type='submit' className={styles.submitButton}>
             Submit
           </button>
         </div>
