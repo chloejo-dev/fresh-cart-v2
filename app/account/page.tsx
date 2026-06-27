@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 import Image from "next/image";
+import Link from "next/link";
 
 type User = {
   email: string;
@@ -56,6 +57,8 @@ export default function Page() {
         <div className={styles.group}>
           <p>Email: {currentUser.email}</p>
           <p>Member Since: {currentUser.joined_date}</p>
+          <p>Address: </p>
+          <Link href='/account/addresses'>Edit Address</Link>
         </div>
       </div>
       <div className={styles.buttonContainer}>
