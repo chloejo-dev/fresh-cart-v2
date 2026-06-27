@@ -33,9 +33,9 @@ export async function GET() {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    // Look up the user in the database
+    // Look up current user in the database
     const [rows] = await db.query<RowDataPacket[]>(
-      "SELECT username, email, joined_date FROM users WHERE user_id = ?",
+      "SELECT email, joined_date FROM users WHERE user_id = ?",
       [userId],
     );
     // User exists?

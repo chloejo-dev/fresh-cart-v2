@@ -5,7 +5,8 @@ import styles from "./page.module.css";
 import { redirectMap } from "@/lib/redirect";
 
 export default function Page() {
-  const [username, setUsername] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [submitError, setSubmitError] = useState<string>("");
@@ -19,18 +20,18 @@ export default function Page() {
       ? redirectMap[redirect as keyof typeof redirectMap]
       : "/";
 
+  let emailError = "";
   let inputPasswordError = "";
   let reEnteredPasswordError = "";
-  let usernameError = "";
 
   const router = useRouter();
 
-  // Real-time validation(username, password, confirmPassword)
-  // Username validation: Spaces not allowed in username
-  if (username.includes(" ")) {
-    usernameError = "Username cannot contain spaces";
-  } else if (username.length > 0 && username.length < 5) {
-    usernameError = "Username should be at least 5 characters";
+  // Real-time validation(email, password, confirmPassword)
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isValidEmail = emailRegex.test(email);
+  if (email.length > 0 && !isValidEmail) {
+    emailError = "Please enter a valid email address";
   }
 
   // Password validation logic => derived state by using useState const variables
@@ -61,7 +62,6 @@ export default function Page() {
     const formData = new FormData(e.currentTarget);
 
     // Make sure below info data type is string: "" vs. "value"
-    const enteredUsername = String(formData.get("username") ?? "").trim();
     const enteredEmail = String(formData.get("email") ?? "").trim();
     const enteredPassword = String(formData.get("password") ?? "");
     const enteredConfirmPassword = String(
@@ -71,14 +71,8 @@ export default function Page() {
     // Required attribute: Catch empty fields and doesn't allow submit to be clicked
 
     // Frontend validation to stop making a POST request
-    // username has spaces?
-    if (enteredUsername.includes(" ")) {
-      return; // stop the function
-    }
-
-    // enteredUsername.length > 0 is prevented by "required" attribute
-    // username length < 5?
-    if (enteredUsername.length < 5) {
+    // Email validation
+    if (!emailRegex.test(enteredEmail)) {
       return;
     }
 
@@ -103,8 +97,8 @@ export default function Page() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: enteredUsername,
         email: enteredEmail,
+        name,
         password: enteredPassword,
       }),
     });
@@ -153,17 +147,16 @@ export default function Page() {
       <form className={styles.formContainer} onSubmit={handleSignUp}>
         <div className={styles.inputContainer}>
           <div className={styles.formGroup}>
-            <label htmlFor='username'>Enter username:</label>
+            <label htmlFor='name'>Enter your name:</label>
             <input
-              id='username'
-              value={username}
-              name='username'
+              id='name'
+              value={name}
+              name='name'
               required
-              autoComplete='username'
-              onChange={(e) => setUsername(e.target.value)}
+              autoComplete='name'
+              onChange={(e) => setName(e.target.value)}
             ></input>
           </div>
-          {usernameError && <p>{usernameError}</p>}
           <div className={styles.formGroup}>
             <label htmlFor='email'>Enter email address:</label>
             <input
@@ -172,8 +165,10 @@ export default function Page() {
               type='email'
               required
               autoComplete='email'
+              onChange={(e) => setEmail(e.target.value)}
             ></input>
           </div>
+          {emailError && <p>{emailError}</p>}
           <div className={styles.formGroup}>
             <label htmlFor='password'>Enter password:</label>
             <input

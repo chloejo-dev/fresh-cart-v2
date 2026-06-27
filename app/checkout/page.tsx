@@ -11,9 +11,16 @@ export default function Page() {
   return (
     <main className={styles.checkoutPage}>
       <section className={styles.orderDetails}>
+        <h2>Review order</h2>
         <div className={styles.shippingAddress}>
           <h2>Delivering to customer name</h2>
-          <p>123 Blicker Street, Moncton, New Brunswick, E0A 0A1, Canada</p>
+          <p>123 Sesame Street, Moncton, New Brunswick, E0A 0A1, Canada</p>
+        </div>
+        <div className={styles.orderItems}>
+          <p>Product Image</p>
+          <p>Quantity</p>
+          <p>Product Name</p>
+          <p>$xx</p>
         </div>
         <div className={styles.paymentMethod}>
           <h2>Paying with 1234</h2>
@@ -21,12 +28,6 @@ export default function Page() {
         </div>
         <div className={styles.deliveryInfo}>
           <h2>Arriving Jun 29, 2026</h2>
-        </div>
-        <div className={styles.orderItems}>
-          <p>Product Image</p>
-          <p>Quantity</p>
-          <p>Product Name</p>
-          <p>$xx</p>
         </div>
       </section>
       <section className={styles.orderSummary}>

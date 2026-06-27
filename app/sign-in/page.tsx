@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { redirectMap } from "@/lib/redirect";
 
 export default function Page() {
-  const [username, setUserName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [signInErr, setSignInErr] = useState<string>("");
 
@@ -21,15 +21,15 @@ export default function Page() {
       ? redirectMap[redirect as keyof typeof redirectMap]
       : "/";
 
-  let usernameError = ""; // derived value (username)
+  let emailError = ""; // derived value (email)
   let passwordError = ""; // derived value (password)
 
-  // Real-time validation for UX: username, password
+  // Real-time validation for UX: email, password
   // required attribute: prevent any empty input fields
-  if (username.includes(" ")) {
-    usernameError = "Username cannot contain spaces";
-  } else if (username.length > 0 && username.length < 5) {
-    usernameError = "Username should be at least 5 characters";
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isValidEmail = emailRegex.test(email);
+  if (email.length > 0 && !isValidEmail) {
+    emailError = "Please enter a valid email address";
   }
 
   if (password.length > 0 && password.length < 10) {
@@ -43,20 +43,14 @@ export default function Page() {
     // Get user entered info from the form using a FormData object
     const formData = new FormData(e.currentTarget);
 
-    // Make sure data type === string for username and password
-    const enteredUsername = String(formData.get("username") ?? "").trim();
+    // Make sure data type === string for email and password
+    const enteredEmail = String(formData.get("email") ?? "").trim();
     const enteredPassword = String(formData.get("password") ?? "");
 
     // Frontend validation
-    if (enteredUsername.includes(" ")) {
-      return;
-    }
-
-    if (enteredUsername.length < 5) {
-      return;
-    }
-
-    if (enteredPassword.length < 10) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValidEmail = emailRegex.test(enteredEmail);
+    if (!isValidEmail) {
       return;
     }
 
@@ -67,7 +61,7 @@ export default function Page() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: enteredUsername,
+        email: enteredEmail,
         password: enteredPassword,
       }),
     });
@@ -128,16 +122,16 @@ export default function Page() {
         <div className={styles.signInContainer}>
           <div className={styles.inputContainer}>
             <div className={styles.formGroup}>
-              <label htmlFor='username'>Username:</label>
+              <label htmlFor='email'>Email:</label>
               <input
-                id='username'
+                id='email'
                 type='text'
-                name='username'
+                name='email'
                 required
-                autoComplete='username'
-                onChange={(e) => setUserName(e.target.value)}
+                autoComplete='email'
+                onChange={(e) => setEmail(e.target.value)}
               ></input>
-              {usernameError && <p>{usernameError}</p>}
+              {emailError && <p>{emailError}</p>}
               <label htmlFor='password'>Password:</label>
               <input
                 id='password'

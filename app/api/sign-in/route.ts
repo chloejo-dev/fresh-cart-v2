@@ -8,41 +8,38 @@ import { cookies } from "next/headers";
 export async function POST(request: Request) {
   try {
     // Get user info from frontend
-    const { username, password } = await request.json();
+    const { email, password } = await request.json();
 
     // Validate type before normalizing the info
-    if (typeof username !== "string" || typeof password !== "string") {
+    if (typeof email !== "string" || typeof password !== "string") {
       return NextResponse.json(
-        { message: "Invalid username or password" },
+        { message: "Invalid email or password" },
         { status: 400 },
       );
     }
 
-    // Normalize the info
-    const normalizedUsername = username.trim().toLowerCase();
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValidEmail = emailRegex.test(email);
 
     // Validate the info
-    if (
-      normalizedUsername.includes(" ") ||
-      normalizedUsername.length < 5 ||
-      password === ""
-    ) {
+    if (!isValidEmail || password === "") {
       return NextResponse.json(
-        { message: "Invalid username or password" },
+        { message: "Invalid email or password" },
         { status: 400 },
       );
     }
 
-    // Check if username exists in DB
+    // Check if user exists in DB
     const [rows] = await db.query<RowDataPacket[]>(
-      "SELECT user_id, hashed_password FROM users WHERE username = ?",
-      [normalizedUsername],
+      "SELECT user_id, hashed_password FROM users WHERE email = ?",
+      [email],
     );
 
-    // No user found with the username
+    // No user found with the email
     if (rows.length === 0) {
       return NextResponse.json(
-        { message: "Invalid username or password" },
+        { message: "Invalid email or password" },
         { status: 401 },
       );
     }
@@ -55,7 +52,7 @@ export async function POST(request: Request) {
     // No, inform frontend
     if (!isMatch) {
       return NextResponse.json(
-        { message: "Invalid username or password" },
+        { message: "Invalid email or password" },
         { status: 401 },
       );
     }

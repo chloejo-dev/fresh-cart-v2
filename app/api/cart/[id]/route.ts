@@ -19,7 +19,7 @@ export async function PATCH(
         { status: 400 },
       );
     }
-    // Get quantity and username from frontend
+    // Get quantity from frontend
     const { quantity } = await request.json();
 
     const isValidBody = Number.isInteger(quantity) && quantity > 0;
@@ -78,7 +78,7 @@ export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  // Get id and username info from frontend
+  // Get id info from frontend
   const { id } = await params;
   const productId = Number(id);
 

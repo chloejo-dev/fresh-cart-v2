@@ -5,7 +5,6 @@ import styles from "./page.module.css";
 import Image from "next/image";
 
 type User = {
-  username: string;
   email: string;
   joined_date: string;
 };
@@ -55,7 +54,6 @@ export default function Page() {
           height={200}
         />
         <div className={styles.group}>
-          <p>Username: {currentUser.username}</p>
           <p>Email: {currentUser.email}</p>
           <p>Member Since: {currentUser.joined_date}</p>
         </div>

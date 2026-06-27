@@ -7,15 +7,11 @@ import { cookies } from "next/headers";
 
 export async function POST(request: Request) {
   try {
-    const { username, email, password } = await request.json();
+    const { email, name, password } = await request.json();
 
     // Backend validation:
-    // Type validation: username, email, password => strings?
-    if (
-      typeof username !== "string" ||
-      typeof email !== "string" ||
-      typeof password !== "string"
-    ) {
+    // Type validation: email, password => strings?
+    if (typeof email !== "string" || typeof password !== "string") {
       return NextResponse.json(
         {
           message: "Invalid request",
@@ -26,30 +22,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const normalizedUsername = username.trim();
     const normalizedEmail = email.trim().toLowerCase();
-
-    // Username validation
-    if (normalizedUsername.includes(" ")) {
-      return NextResponse.json(
-        {
-          message: "Username cannot contain spaces",
-        },
-        {
-          status: 400,
-        },
-      );
-    }
-    if (normalizedUsername.length < 5) {
-      return NextResponse.json(
-        {
-          message: "Username should be at least 5 characters",
-        },
-        {
-          status: 400,
-        },
-      );
-    }
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -89,10 +62,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // Username already exists?
+    // User already exists?
     const [existingUsers] = await db.query<RowDataPacket[]>(
-      "SELECT user_id, username FROM users WHERE username = ?",
-      [normalizedUsername],
+      "SELECT user_id, email FROM users WHERE email = ?",
+      [normalizedEmail],
     );
 
     // Y => Return error message
@@ -113,8 +86,8 @@ export async function POST(request: Request) {
 
     // Add user info to DB
     const [result] = await db.query<ResultSetHeader>(
-      "INSERT INTO users (username, email, hashed_password) VALUES (?, ?, ?)",
-      [normalizedUsername, normalizedEmail, hashedPassword],
+      "INSERT INTO users (email, name, hashed_password) VALUES (?, ?, ?)",
+      [normalizedEmail, name, hashedPassword],
     );
 
     // User successfully created?
