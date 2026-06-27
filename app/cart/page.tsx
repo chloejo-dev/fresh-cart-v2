@@ -354,7 +354,7 @@ export default function Page() {
                   </div>
                 </div>
 
-                <div className={styles.btnContainer}>
+                <div className={styles.buttonContainer}>
                   <button
                     type='button'
                     onClick={() => decreaseQty(item.product_id)}
@@ -369,12 +369,12 @@ export default function Page() {
                     <Plus />
                   </button>
                   <button
-                    className={styles.deleteBtn}
+                    className={styles.deleteButton}
                     onClick={() => deleteItem(item.product_id)}
                   >
                     Delete
                   </button>
-                  <button className={styles.saveBtn}>Save for later</button>
+                  <button className={styles.saveButton}>Save for later</button>
                 </div>
               </div>
             </div>
