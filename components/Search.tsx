@@ -27,7 +27,7 @@ export default function Search() {
             setSearchWord(e.target.value);
           }}
         />
-        <button type='submit' className={styles.searchBtn}>
+        <button type='submit' className={styles.searchButton}>
           🔍
         </button>
       </form>
