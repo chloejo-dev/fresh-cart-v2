@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function Header() {
-  const [isSignIn, setIsSignIn] = useState<boolean>(false);
+  const [isSignIn, setIsSignIn] = useState(false);
 
   const pathname = usePathname();
   const router = useRouter();

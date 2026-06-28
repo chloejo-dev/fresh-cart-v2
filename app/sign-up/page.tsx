@@ -5,11 +5,11 @@ import styles from "./page.module.css";
 import { redirectMap } from "@/lib/redirect";
 
 export default function Page() {
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [submitError, setSubmitError] = useState<string>("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [submitError, setSubmitError] = useState("");
 
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");

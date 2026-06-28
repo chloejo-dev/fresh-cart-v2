@@ -22,8 +22,8 @@ function sliceArray(arr: Product[], size: number): Product[][] {
 
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   // Fetch all product data
   useEffect(() => {

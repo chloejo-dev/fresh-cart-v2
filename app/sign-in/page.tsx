@@ -6,9 +6,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { redirectMap } from "@/lib/redirect";
 
 export default function Page() {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [signInErr, setSignInErr] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [signInErr, setSignInErr] = useState("");
 
   // Checkout button -> sign-in page -> redirect to checkout page
   const router = useRouter();
@@ -28,6 +28,7 @@ export default function Page() {
   // required attribute: prevent any empty input fields
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const isValidEmail = emailRegex.test(email);
+
   if (email.length > 0 && !isValidEmail) {
     emailError = "Please enter a valid email address";
   }
@@ -50,6 +51,7 @@ export default function Page() {
     // Frontend validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const isValidEmail = emailRegex.test(enteredEmail);
+
     if (!isValidEmail) {
       return;
     }

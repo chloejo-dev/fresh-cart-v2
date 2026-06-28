@@ -29,7 +29,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [cartStatus, setCartStatus] = useState<cartStatus>("idle");
-  const [isSignIn, setIsSignIn] = useState<boolean>(false);
+  const [isSignIn, setIsSignIn] = useState(false);
 
   // Fetch/display single product data from DB
   useEffect(() => {
