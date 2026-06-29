@@ -23,14 +23,12 @@ export default function Page() {
       const res = await fetch("/api/me");
       // N:
       if (!res.ok) {
-        console.log("Please sign in");
         router.push("/sign-in");
         return;
       }
       // Y:
       const data = await res.json();
       setCurrentUser(data);
-      console.log(data);
     };
 
     fetchUser();
