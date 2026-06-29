@@ -2,14 +2,25 @@
     display: flex;
     justify-content: center;
     min-height: 60vh;
-    background-color: red;
     gap: 2rem;
 }
 
 .orderDetails {
     width: 60%;
-    background-color: aquamarine;
     padding: 2rem;
+}
+
+.orderItems {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.orderItemRow {
+    display: grid;
+    grid-template-columns: 100px 1fr 80px 120px;
+    align-items: center;
+    column-gap: 2rem;
 }
 
 .orderSummary {
@@ -33,8 +44,29 @@
     border: none;
     border-radius: 20px;
     transition: opacity 0.2s;
+    margin-bottom: 0.5rem;
 }
 
 .orderButton:hover {
     opacity: 0.7;
+}
+
+.productImage {
+    object-fit: contain;
+}
+
+.productName {
+    margin: 0;
+}
+
+.productPrice {
+    margin: 0;
+    text-align: right;
+}
+
+.quantityControls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
 }
