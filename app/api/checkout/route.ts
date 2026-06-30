@@ -8,6 +8,7 @@ export async function GET() {
     // User sign in?
     const userId = await getUserIdFromToken();
 
+    // N:
     if (!userId) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
