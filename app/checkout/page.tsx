@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Trash2, Plus, Minus } from "lucide-react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 type CartItem = {
   productId: string;
@@ -31,24 +32,61 @@ type CheckoutInfo = {
 export default function Page() {
   const [checkoutInfo, setCheckoutInfo] = useState<CheckoutInfo | null>(null);
 
+  const router = useRouter();
+
   useEffect(() => {
     const getCheckoutInfo = async () => {
-      const res = await fetch("/api/checkout");
+      try {
+        const res = await fetch("/api/checkout");
 
-      // Error handling
-      if (!res.ok) {
-        return;
+        // User sign in?
+        // N: Redirect to sign-in page
+        if (res.status === 401) {
+          router.push("/sign-in?redirect=checkout");
+          return;
+        }
+
+        const data = await res.json();
+
+        // Error handling
+        if (!res.ok) {
+          toast.error(data.message);
+          return;
+        }
+        setCheckoutInfo(data);
+      } catch (err: unknown) {
+        console.error(err);
       }
-
-      const data = await res.json();
-      setCheckoutInfo(data);
     };
 
     getCheckoutInfo();
-  }, []);
+  }, [router]);
 
-  const handleOrder = () => {
-    console.log("Place order button clicked");
+  const handleOrder = async () => {
+    try {
+      // Make a POST request
+      const res = await fetch("/api/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          cart: cart.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+          })),
+        }),
+      });
+
+      // Add order success?
+      // N:
+      if (!res.ok) {
+        console.error("Failed to save order");
+        return;
+      }
+      // Y:
+      router.push("/order");
+    } catch (err: unknown) {
+      console.error(err);
+    }
   };
 
   if (!checkoutInfo) {
