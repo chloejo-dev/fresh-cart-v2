@@ -16,8 +16,8 @@ interface CartItem {
 
 export default function Page() {
   const [cartArr, setCartArr] = useState<CartItem[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isSignIn, setIsSignIn] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSignIn, setIsSignIn] = useState(false);
 
   const router = useRouter();
 
