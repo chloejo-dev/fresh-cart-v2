@@ -31,6 +31,7 @@ type CheckoutInfo = {
 
 export default function Page() {
   const [checkoutInfo, setCheckoutInfo] = useState<CheckoutInfo | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
 
@@ -63,6 +64,13 @@ export default function Page() {
   }, [router]);
 
   const handleOrder = async () => {
+    // User submit order?
+    // Y => Do not allow another submission
+    if (isSubmitting) return;
+
+    // N:
+    setIsSubmitting(true);
+
     try {
       // Make a POST request
       const res = await fetch("/api/order", {
@@ -83,7 +91,7 @@ export default function Page() {
         return;
       }
       // Y:
-      router.push("/order");
+      router.push("/order-success");
     } catch (err: unknown) {
       console.error(err);
     }
@@ -234,8 +242,12 @@ export default function Page() {
         </div>
       </section>
       <section className={styles.orderSummary}>
-        <button className={styles.orderButton} onClick={handleOrder}>
-          Place Your Order
+        <button
+          className={styles.orderButton}
+          onClick={handleOrder}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Placing Order..." : "Place Your Order"}
         </button>
         <div className={styles.orderSummaryDetails}>
           <p>
