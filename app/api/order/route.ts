@@ -12,12 +12,13 @@ type ValidRow = RowDataPacket & {
   stockQuantity: number;
 };
 
+// Data type to store data sent from client
 type OrderItem = {
   productId: number;
   productName: string;
   productPic: string;
   productPrice: number;
-  productQuantity: number;
+  quantity: number;
 };
 
 export async function POST(request: Request) {
@@ -90,13 +91,30 @@ export async function POST(request: Request) {
         );
       }
 
+      // Update stock quantity
+      const [updateResult] = await connection.query<ResultSetHeader>(
+        "UPDATE products SET stock_quantity= stock_quantity - ? WHERE product_id = ? AND stock_quantity >= ?",
+        [item.quantity, item.productId, item.quantity],
+      );
+
+      // Update success?
+      // N:
+      if (updateResult.affectedRows !== 1) {
+        await connection.rollback();
+        transactionStarted = false;
+        return NextResponse.json(
+          { message: "Can't update stock quantity" },
+          { status: 400 },
+        );
+      }
+
       // Create current product object to user it later
       const orderItem: OrderItem = {
         productId: currentRow.productId,
         productName: currentRow.productName,
         productPic: currentRow.productPic,
         productPrice: currentRow.productPrice,
-        productQuantity: item.quantity,
+        quantity: item.quantity,
       };
 
       // Add current product object to orderItems array
@@ -153,7 +171,7 @@ export async function POST(request: Request) {
           item.productId,
           item.productName,
           item.productPic,
-          item.productQuantity,
+          item.quantity,
           item.productPrice,
         ],
       );
@@ -169,6 +187,24 @@ export async function POST(request: Request) {
         );
       }
     }
+
+    // Delete data from user's cart
+    const [deleteResult] = await connection.query<ResultSetHeader>(
+      "DELETE FROM cart WHERE user_id = ?",
+      [userId],
+    );
+
+    // Delete data success?
+    // N:
+    if (deleteResult.affectedRows === 0) {
+      await connection.rollback();
+      transactionStarted = false;
+      return NextResponse.json(
+        { message: "Failed to delete data from user's cart" },
+        { status: 400 },
+      );
+    }
+
     await connection.commit();
     transactionStarted = false;
 
