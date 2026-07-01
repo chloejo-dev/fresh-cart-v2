@@ -73,7 +73,7 @@ export default function Page() {
 
     try {
       // Make a POST request
-      const res = await fetch("/api/order", {
+      const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -85,9 +85,10 @@ export default function Page() {
       });
 
       // Add order success?
+      const data = await res.json();
       // N:
       if (!res.ok) {
-        console.error("Failed to save order");
+        console.error(`Create order failed (${res.status}):`, data.message);
         return;
       }
       // Y:
