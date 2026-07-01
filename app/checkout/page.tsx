@@ -95,6 +95,8 @@ export default function Page() {
       router.push("/order-success");
     } catch (err: unknown) {
       console.error(err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
