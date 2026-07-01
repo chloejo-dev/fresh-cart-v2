@@ -57,6 +57,7 @@ export default function Page() {
           <p>Member Since: {currentUser.joined_date}</p>
           <p>Address: </p>
           <Link href='/account/addresses'>Edit Address</Link>
+          <Link href='/orders'>View Orders</Link>
         </div>
       </div>
       <div className={styles.buttonContainer}>
