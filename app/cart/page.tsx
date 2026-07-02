@@ -303,6 +303,7 @@ export default function Page() {
     if (!isSignIn) {
       // Checkout button -> sign-in page -> redirect to checkout page
       router.push("/sign-in?redirect=checkout");
+      return;
     }
 
     // Y: Proceed with checkout
