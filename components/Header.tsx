@@ -85,16 +85,16 @@ export default function Header() {
         </div>
       </header>
       <div className={styles.categoryStrip}>
-        <Link href='products/fresh-produce' className={styles.category}>
+        <Link href='/products/fresh-produce' className={styles.category}>
           Fresh Produce
         </Link>
-        <Link href='products/meat' className={styles.category}>
+        <Link href='/products/meat' className={styles.category}>
           Meat
         </Link>
-        <Link href='products/seafood' className={styles.category}>
+        <Link href='/products/seafood' className={styles.category}>
           Seafood
         </Link>
-        <Link href='products/dairy' className={styles.category}>
+        <Link href='/products/dairy' className={styles.category}>
           Dairy
         </Link>
       </div>
