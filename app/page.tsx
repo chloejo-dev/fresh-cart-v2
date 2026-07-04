@@ -8,7 +8,7 @@ export default function Home() {
         <h1 className={styles.title}>Freshness Delivered to Your Door.</h1>
         <p>Support local farmers and get 20% off your first reorder.</p>
         <br />
-        <Link href='products/fresh-produce' className={styles.ctaMain}>
+        <Link href='/products/fresh-produce' className={styles.ctaMain}>
           Shop Now
         </Link>
       </div>
