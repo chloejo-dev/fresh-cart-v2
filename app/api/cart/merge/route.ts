@@ -4,8 +4,8 @@ import db from "@/lib/db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 type ExistingCartRow = RowDataPacket & {
-  product_id: number;
-  quantity: number;
+  productId: number;
+  productQuantity: number;
 };
 
 export async function POST(request: Request) {
@@ -41,10 +41,10 @@ export async function POST(request: Request) {
       // product_id or quantity < 0 ?
       // Y:
       if (
-        !Number.isInteger(item.product_id) ||
-        item.product_id <= 0 ||
-        !Number.isInteger(item.quantity) ||
-        item.quantity <= 0
+        !Number.isInteger(item.productId) ||
+        item.productId <= 0 ||
+        !Number.isInteger(item.productQuantity) ||
+        item.productQuantity <= 0
       ) {
         return NextResponse.json(
           { message: "POST /api/cart/merge failed" },
@@ -54,14 +54,18 @@ export async function POST(request: Request) {
       // N:
       // Current product already exists in user's cart?
       const [rows] = await db.query<ExistingCartRow[]>(
-        "SELECT product_id, quantity FROM cart WHERE product_id = ? AND user_id = ?",
-        [item.product_id, userId],
+        `SELECT product_id AS productId, 
+        quantity AS productQuantity
+        FROM cart
+        WHERE product_id = ?
+        AND user_id = ?`,
+        [item.productId, userId],
       );
       // N => Add it to user's cart
       if (rows.length === 0) {
         const [res] = await db.query<ResultSetHeader>(
           "INSERT INTO cart (product_id, quantity, user_id) VALUES(?, ?, ?)",
-          [item.product_id, item.quantity, userId],
+          [item.productId, item.productQuantity, userId],
         );
         if (res.affectedRows === 0) {
           return NextResponse.json(
@@ -74,11 +78,11 @@ export async function POST(request: Request) {
         // Get current product row
         const currentItem = rows[0];
         // Calculate a new quantity
-        const newQuantity = item.quantity + currentItem.quantity;
+        const newQuantity = item.productQuantity + currentItem.productQuantity;
 
         const [res] = await db.query<ResultSetHeader>(
           "UPDATE cart SET quantity = ? WHERE product_id = ? AND user_id = ?",
-          [newQuantity, item.product_id, userId],
+          [newQuantity, item.productId, userId],
         );
 
         // Update success?
@@ -97,7 +101,11 @@ export async function POST(request: Request) {
       { status: 200 },
     );
   } catch (err: unknown) {
-    console.error("POST /api/cart/merge failed", err);
+    if (err instanceof Error) {
+      console.error("POST /api/cart/merge failed:", err.message);
+    } else {
+      console.error("POST /api/cart/merge failed:", err);
+    }
     return NextResponse.json(
       {
         message: "Failed to merge cart",
