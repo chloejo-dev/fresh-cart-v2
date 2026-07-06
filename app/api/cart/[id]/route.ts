@@ -13,6 +13,7 @@ export async function PATCH(
     const { id } = await params;
     const productId = Number(id);
 
+    // Validate ID data type
     if (!Number.isInteger(productId) || productId <= 0) {
       return NextResponse.json(
         { message: "Invalid product id" },
@@ -20,9 +21,10 @@ export async function PATCH(
       );
     }
     // Get quantity from frontend
-    const { quantity } = await request.json();
+    const { productQuantity } = await request.json();
 
-    const isValidBody = Number.isInteger(quantity) && quantity > 0;
+    const isValidBody =
+      Number.isInteger(productQuantity) && productQuantity > 0;
 
     if (!isValidBody) {
       return NextResponse.json(
@@ -30,7 +32,7 @@ export async function PATCH(
         { status: 400 },
       );
     }
-    // Check if user has signed in
+    // User sign in?
     const userId = await getUserIdFromToken();
 
     if (userId === null) {
@@ -40,7 +42,7 @@ export async function PATCH(
     // Request DB to change product quantity
     const [rows] = await db.query<ResultSetHeader>(
       "UPDATE cart SET quantity = ? WHERE product_id = ? AND user_id= ?",
-      [quantity, productId, userId],
+      [productQuantity, productId, userId],
     );
 
     // Error handling
@@ -73,7 +75,7 @@ export async function PATCH(
   }
 }
 
-// Delete product if quantity === 0
+// Delete current product from user's cart
 export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -82,6 +84,7 @@ export async function DELETE(
   const { id } = await params;
   const productId = Number(id);
 
+  // Validate ID data type
   if (!Number.isInteger(productId) || productId <= 0) {
     return NextResponse.json(
       { message: "Invalid product id" },
@@ -89,15 +92,15 @@ export async function DELETE(
     );
   }
 
-  // Check if user has signed in
-  const userId = await getUserIdFromToken();
-
-  // N:
-  if (userId === null) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
-
   try {
+    // User sign in?
+    const userId = await getUserIdFromToken();
+
+    // N:
+    if (userId === null) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const [rows] = await db.query<ResultSetHeader>(
       "DELETE FROM cart WHERE product_id =? AND user_id=?",
       [productId, userId],
