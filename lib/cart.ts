@@ -21,7 +21,7 @@ export async function getCartQuantity(
 
   // Y => e.g. [{quantity: 5}] => rows[0].quantity
   // N => []
-  return rows[0]?.quantity || null;
+  return rows[0]?.quantity ?? null;
 }
 
 export async function getCartItems(userId: number): Promise<CartItem[]> {
