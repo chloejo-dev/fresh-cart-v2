@@ -93,22 +93,24 @@ export default function CartClient({ initialCart, isSignIn }: CartProps) {
       // N: Update guest cart
       // Fetch existing guest cart
       const guestCart = localStorage.getItem("cart");
-      // Find the current item index
-      if (guestCart) {
-        const parsedGuestCart: CartItem[] = JSON.parse(guestCart);
-        const currentItemIndex = parsedGuestCart.findIndex(
-          (item: CartItem) => item.productId === id,
-        );
 
-        // Error handling: Current item not in guest cart
-        if (currentItemIndex === -1) {
-          return;
-        }
-        // Update with a new quantity
-        parsedGuestCart[currentItemIndex].productQuantity = newQuantity;
-        // Store updated guest cart in local storage
-        localStorage.setItem("cart", JSON.stringify(parsedGuestCart));
+      if (!guestCart) return;
+
+      // Find the current item index
+      const parsedGuestCart: CartItem[] = JSON.parse(guestCart);
+      const currentItemIndex = parsedGuestCart.findIndex(
+        (item: CartItem) => item.productId === id,
+      );
+
+      // Error handling: Current item not found in guest cart
+      if (currentItemIndex === -1) {
+        return;
       }
+      // Update with a new quantity
+      parsedGuestCart[currentItemIndex].productQuantity = newQuantity;
+
+      // Store updated guest cart in local storage
+      localStorage.setItem("cart", JSON.stringify(parsedGuestCart));
     }
     // Frontend => rerender cart page
     setCartArr((prev) =>
@@ -198,47 +200,50 @@ export default function CartClient({ initialCart, isSignIn }: CartProps) {
       // Get guest cart from local storage
       const guestCart = localStorage.getItem("cart");
 
-      if (guestCart) {
-        const parsedGuestCart: CartItem[] = JSON.parse(guestCart);
-        if (currentItem.productQuantity === 1) {
-          // Delete current item
-          const newGuestCart = parsedGuestCart.filter(
-            (item: CartItem) => item.productId !== id,
-          );
-          // Store new guest cart in local storage
-          localStorage.setItem("cart", JSON.stringify(newGuestCart));
+      if (!guestCart) return;
 
-          // Frontend => Delete current item and re-render cart page
-          setCartArr((prev) => prev.filter((item) => item.productId !== id));
-        } else {
-          // Calculate new quantity
-          const newQuantity = currentItem.productQuantity - 1;
+      const parsedGuestCart: CartItem[] = JSON.parse(guestCart);
 
-          // Update guest cart with new quantity
-          const currentItemIndex = parsedGuestCart.findIndex(
-            (item: CartItem) => item.productId === id,
-          );
+      if (currentItem.productQuantity === 1) {
+        // Delete current item
+        const newGuestCart = parsedGuestCart.filter(
+          (item: CartItem) => item.productId !== id,
+        );
+        // Store new guest cart in local storage
+        localStorage.setItem("cart", JSON.stringify(newGuestCart));
 
-          if (currentItemIndex === -1) {
-            return;
-          }
+        // Frontend => Delete current item and re-render cart page
+        setCartArr((prev) => prev.filter((item) => item.productId !== id));
+      } else {
+        // Calculate new quantity
+        const newQuantity = currentItem.productQuantity - 1;
 
-          parsedGuestCart[currentItemIndex].productQuantity = newQuantity;
+        // Update guest cart with new quantity
+        const currentItemIndex = parsedGuestCart.findIndex(
+          (item: CartItem) => item.productId === id,
+        );
 
-          // Store updated guest cart in local storage
-          localStorage.setItem("cart", JSON.stringify(parsedGuestCart));
-          // Frontend re-rendering
-          setCartArr((prev) =>
-            prev.map((item) =>
-              item.productId === id
-                ? {
-                    ...item,
-                    productQuantity: newQuantity,
-                  }
-                : item,
-            ),
-          );
+        // Item not found
+        if (currentItemIndex === -1) {
+          return;
         }
+
+        parsedGuestCart[currentItemIndex].productQuantity = newQuantity;
+
+        // Store updated guest cart in local storage
+        localStorage.setItem("cart", JSON.stringify(parsedGuestCart));
+
+        // Frontend re-rendering
+        setCartArr((prev) =>
+          prev.map((item) =>
+            item.productId === id
+              ? {
+                  ...item,
+                  productQuantity: newQuantity,
+                }
+              : item,
+          ),
+        );
       }
     }
   };
@@ -275,17 +280,18 @@ export default function CartClient({ initialCart, isSignIn }: CartProps) {
       // N:
       // Get guest cart from local storage
       const guestCart = localStorage.getItem("cart");
-      // Parse guest cart to access guest cart
-      if (guestCart) {
-        const parsedGuestCart: CartItem[] = JSON.parse(guestCart);
 
-        // Delete current item from the cart
-        const newGuestCart = parsedGuestCart.filter(
-          (item: CartItem) => item.productId !== id,
-        );
-        // Store updated cart in local storage
-        localStorage.setItem("cart", JSON.stringify(newGuestCart));
-      }
+      if (!guestCart) return;
+
+      // Parse guest cart to access guest cart
+      const parsedGuestCart: CartItem[] = JSON.parse(guestCart);
+
+      // Delete current item from the cart
+      const newGuestCart = parsedGuestCart.filter(
+        (item: CartItem) => item.productId !== id,
+      );
+      // Store updated cart in local storage
+      localStorage.setItem("cart", JSON.stringify(newGuestCart));
 
       // Frontend => Delete current item from guest cart
       setCartArr((prev) => prev.filter((item) => item.productId !== id));
