@@ -1,5 +1,5 @@
 import getUserIdFromToken from "@/lib/auth";
-import { getCartData } from "@/lib/cart";
+import { getCartItems } from "@/lib/cart";
 import CartClient from "./CartClient";
 
 export default async function Page() {
@@ -9,7 +9,7 @@ export default async function Page() {
   const isSignIn = Boolean(userId);
 
   // Get cart data
-  const initialCart = userId ? await getCartData(userId) : [];
+  const initialCart = userId ? await getCartItems(userId) : [];
 
   return (
     <CartClient initialCart={initialCart} isSignIn={isSignIn}></CartClient>
