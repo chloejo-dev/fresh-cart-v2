@@ -28,7 +28,7 @@ export default async function Page({
 }) {
   const slug = (await params).slug;
 
-  // Fetch product data directly from DB
+  // Fetch products data directly from DB
   const [productRows] = await db.query<Product[]>(
     `SELECT product_id AS productId, 
     product_name AS productName,
