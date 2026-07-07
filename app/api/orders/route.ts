@@ -18,7 +18,7 @@ type OrderItem = {
   productName: string;
   productPic: string;
   productPrice: number;
-  quantity: number;
+  productQuantity: number;
 };
 
 export async function POST(request: Request) {
@@ -56,12 +56,12 @@ export async function POST(request: Request) {
       // User has current item in user's cart?
       const [rows] = await connection.query<ValidRow[]>(
         `SELECT
-        cart.user_id as userId,
-        cart.product_id as productId,
-        products.product_name as productName,
-        products.product_pic as productPic,
-        products.product_price as productPrice,
-        products.stock_quantity as stockQuantity
+        cart.user_id AS userId,
+        cart.product_id AS productId,
+        products.product_name AS productName,
+        products.product_pic AS productPic,
+        products.product_price AS productPrice,
+        products.stock_quantity AS stockQuantity
         FROM cart
         JOIN products
         ON cart.product_id = products.product_id
@@ -82,7 +82,7 @@ export async function POST(request: Request) {
       // Enough stock?
       const currentRow = rows[0]; // {userId, productId, productName, productPic, productPrice, stockQuantity}
       // N:
-      if (currentRow.stockQuantity < item.quantity) {
+      if (currentRow.stockQuantity < item.productQuantity) {
         await connection.rollback();
         transactionStarted = false;
         return NextResponse.json(
@@ -94,7 +94,7 @@ export async function POST(request: Request) {
       // Update stock quantity
       const [updateResult] = await connection.query<ResultSetHeader>(
         "UPDATE products SET stock_quantity= stock_quantity - ? WHERE product_id = ? AND stock_quantity >= ?",
-        [item.quantity, item.productId, item.quantity],
+        [item.productQuantity, item.productId, item.productQuantity],
       );
 
       // Update success?
@@ -114,14 +114,14 @@ export async function POST(request: Request) {
         productName: currentRow.productName,
         productPic: currentRow.productPic,
         productPrice: currentRow.productPrice,
-        quantity: item.quantity,
+        productQuantity: item.productQuantity,
       };
 
       // Add current product object to orderItems array
       orderItems.push(orderItem);
 
       // Calculate subtotal
-      subtotal += currentRow.productPrice * item.quantity;
+      subtotal += currentRow.productPrice * item.productQuantity;
     }
     // All items successfully validated?
     // Y:
@@ -171,7 +171,7 @@ export async function POST(request: Request) {
           item.productId,
           item.productName,
           item.productPic,
-          item.quantity,
+          item.productQuantity,
           item.productPrice,
         ],
       );
