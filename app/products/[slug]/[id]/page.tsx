@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import ProductDetail from "./ProductDetail";
 import getUserIdFromToken from "@/lib/auth";
-import { getProduct } from "@/lib/product";
+import { getProduct } from "@/lib/products";
 import { notFound } from "next/navigation";
 import { getCartQuantity } from "@/lib/cart";
 
