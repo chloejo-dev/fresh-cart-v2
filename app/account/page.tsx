@@ -57,8 +57,8 @@ export default function Page() {
           <p>Member Since: {currentUser.joined_date}</p>
           <p>Address: </p>
           <div className={styles.links}>
-          <Link href='/account/addresses'>Edit Address</Link>
-          <Link href='/orders'>View Orders</Link>
+            <Link href='/account/addresses'>Edit Address</Link>
+            <Link href='/orders'>View Orders (Coming Soon)</Link>
           </div>
         </div>
       </div>
@@ -67,13 +67,13 @@ export default function Page() {
           type='submit'
           className={`${styles.button} ${styles.primaryButton}`}
         >
-          Sign Out
+          Sign Out (Coming Soon)
         </button>
         <button
           type='submit'
           className={`${styles.button} ${styles.secondaryButton}`}
         >
-          Change Password
+          Change Password (Coming Soon)
         </button>
       </div>
     </main>
