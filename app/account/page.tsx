@@ -56,8 +56,10 @@ export default function Page() {
           <p>Email: {currentUser.email}</p>
           <p>Member Since: {currentUser.joined_date}</p>
           <p>Address: </p>
+          <div className={styles.links}>
           <Link href='/account/addresses'>Edit Address</Link>
           <Link href='/orders'>View Orders</Link>
+          </div>
         </div>
       </div>
       <div className={styles.buttonContainer}>
@@ -65,7 +67,7 @@ export default function Page() {
           type='submit'
           className={`${styles.button} ${styles.primaryButton}`}
         >
-          Logout
+          Sign Out
         </button>
         <button
           type='submit'
