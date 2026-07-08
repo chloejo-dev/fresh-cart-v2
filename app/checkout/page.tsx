@@ -16,7 +16,7 @@ export default async function Page() {
   const initialCheckoutInfo = await getCheckoutInfo(userId);
 
   if (!initialCheckoutInfo.user) {
-    redirect("/account/addresses?redirect=/checkout");
+    redirect("/account/addresses?redirect=checkout");
   }
 
   if (initialCheckoutInfo.cart.length === 0) {
