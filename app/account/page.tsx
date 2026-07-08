@@ -42,6 +42,15 @@ export default function Page() {
     );
   }
 
+  const joinedDate = new Date(currentUser.joined_date).toLocaleDateString(
+    "en-CA",
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    },
+  );
+
   return (
     <main className={styles.main}>
       <h1>Your Account</h1>
@@ -54,7 +63,7 @@ export default function Page() {
         />
         <div className={styles.group}>
           <p>Email: {currentUser.email}</p>
-          <p>Member Since: {currentUser.joined_date}</p>
+          <p>Member Since: {joinedDate}</p>
           <p>Address: </p>
           <div className={styles.links}>
             <Link href='/account/addresses'>Edit Address</Link>
