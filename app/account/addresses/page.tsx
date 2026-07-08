@@ -2,12 +2,15 @@
 import React, { useState } from "react";
 import styles from "./page.module.css";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { redirectMap } from "@/lib/redirect";
 
 type AddressFormErrors = {
   recipientName?: string;
   addressLine1?: string;
+  addressLine2?: string;
   city?: string;
+  province?: string;
   postalCode?: string;
   phoneNumber?: string;
   form?: string;
@@ -22,6 +25,7 @@ export default function Page() {
   const [postalCode, setPostalCode] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [errors, setErrors] = useState<AddressFormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const provinces = [
     "AB",
@@ -40,9 +44,21 @@ export default function Page() {
   ];
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
+
+  // Validate redirect route
+  const safeRedirect =
+    redirect && redirect in redirectMap
+      ? redirectMap[redirect as keyof typeof redirectMap]
+      : "/account";
 
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+
+    // Prevent multiple submission at once
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
     // Frontend => validate all user input
     // Normalize input first
@@ -73,16 +89,28 @@ export default function Page() {
     if (normalizedAddressLine1.length > 100)
       addressFormErrors.addressLine1 = "Address cannot exceed 100 characters";
 
+    if (normalizedAddressLine2.length > 100) {
+      addressFormErrors.addressLine2 =
+        "Address line 2 cannot exceed 100 characters";
+    }
+
     // City
     if (normalizedCity === "") addressFormErrors.city = "City is required";
     if (normalizedCity.length > 100)
       addressFormErrors.city = "City cannot exceed 100 characters";
 
+    if (province === "") {
+      addressFormErrors.province = "Province/Territory is required";
+    }
+
     // postal code(letter + number + letter + number + letter + number)
     const normalizedPostalCode = postalCode.replace(/\s/g, "").toUpperCase();
     // Postal code
-    if (!postalCodeRegex.test(normalizedPostalCode))
+    if (normalizedPostalCode === "") {
+      addressFormErrors.postalCode = "Postal code is required";
+    } else if (!postalCodeRegex.test(normalizedPostalCode)) {
       addressFormErrors.postalCode = "Please enter a valid postal code";
+    }
 
     // Phone number => Validate first
     if (!phoneRegex.test(phoneNumber.trim()))
@@ -92,38 +120,46 @@ export default function Page() {
 
     // Frontend => Validate user input
     if (Object.keys(addressFormErrors).length > 0) {
+      setIsSubmitting(false);
       return;
     }
 
     // Normalize phone number
     const normalizedPhoneNumber = phoneNumber.replace(/\D/g, "");
 
-    // Make HTTP request only when all user input is valid
-    const res = await fetch("/api/addresses", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        recipientName: normalizedRecipientName,
-        addressLine1: normalizedAddressLine1,
-        addressLine2: normalizedAddressLine2,
-        city: normalizedCity,
-        province,
-        postalCode: normalizedPostalCode,
-        phoneNumber: normalizedPhoneNumber,
-      }),
-    });
+    try {
+      // Make HTTP request only when all user input is valid
+      const res = await fetch("/api/addresses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipientName: normalizedRecipientName,
+          addressLine1: normalizedAddressLine1,
+          addressLine2: normalizedAddressLine2,
+          city: normalizedCity,
+          province,
+          postalCode: normalizedPostalCode,
+          phoneNumber: normalizedPhoneNumber,
+        }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    // Adding address success?
-    // N:
-    if (!res.ok) {
-      setErrors({ form: data.message });
-      return;
+      // Adding address success?
+      // N:
+      if (!res.ok) {
+        setErrors({ form: data.message });
+        return;
+      }
+
+      // Y:
+      router.push(safeRedirect);
+    } catch (err: unknown) {
+      console.error(err);
+      setErrors({ form: "Something went wrong. Please try again." });
+    } finally {
+      setIsSubmitting(false);
     }
-
-    // Y:
-    router.push("/account");
   };
 
   // Address form
@@ -171,6 +207,7 @@ export default function Page() {
               onChange={(e) => setAddressLine2(e.target.value)}
             ></input>
           </div>
+          {errors.addressLine2 && <p>{errors.addressLine2}</p>}
           <div className={styles.formGroup}>
             <label htmlFor='city'>City*</label>
             <input
@@ -203,6 +240,7 @@ export default function Page() {
                 ))}
               </select>
             </div>
+            {errors.province && <p>{errors.province}</p>}
             <div className={styles.postalCodeGroup}>
               <label htmlFor='postalCode'>Postal Code*</label>
               <input
@@ -235,8 +273,12 @@ export default function Page() {
               Cancel
             </Link>
             {errors.form && <p>{errors.form}</p>}
-            <button type='submit' className={styles.saveButton}>
-              Save
+            <button
+              type='submit'
+              className={styles.saveButton}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Saving..." : "Save"}
             </button>
           </div>
         </div>
