@@ -35,7 +35,14 @@ export async function GET() {
 
     // Look up current user in the database
     const [rows] = await db.query<RowDataPacket[]>(
-      "SELECT email, joined_date FROM users WHERE user_id = ?",
+      `SELECT 
+      users.email,
+      users.joined_date AS joinedDate,
+      addresses.address_line1 AS addressLine1
+      FROM users
+      LEFT JOIN addresses
+      ON users.user_id = addresses.user_id
+      WHERE users.user_id = ?`,
       [userId],
     );
     // User exists?

@@ -7,7 +7,8 @@ import Link from "next/link";
 
 type User = {
   email: string;
-  joined_date: string;
+  joinedDate: string;
+  addressLine1?: string;
 };
 
 export default function Page() {
@@ -28,6 +29,7 @@ export default function Page() {
       }
       // Y:
       const data = await res.json();
+      console.log(data);
       setCurrentUser(data);
     };
 
@@ -42,7 +44,7 @@ export default function Page() {
     );
   }
 
-  const joinedDate = new Date(currentUser.joined_date).toLocaleDateString(
+  const joinedDate = new Date(currentUser.joinedDate).toLocaleDateString(
     "en-CA",
     {
       year: "numeric",
@@ -64,7 +66,7 @@ export default function Page() {
         <div className={styles.group}>
           <p>Email: {currentUser.email}</p>
           <p>Member Since: {joinedDate}</p>
-          <p>Address: </p>
+          <p>Address: {currentUser.addressLine1}</p>
           <div className={styles.links}>
             <Link href='/account/addresses'>Edit Address</Link>
             <Link href='/orders'>View Orders (Coming Soon)</Link>
