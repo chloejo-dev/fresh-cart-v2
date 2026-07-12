@@ -230,7 +230,7 @@ export default function ProductDetail({
           </button>
         )}
         <button className={styles.buyButton} type='button'>
-          Buy Now
+          Buy Now (Coming Soon)
         </button>
       </div>
     </>
