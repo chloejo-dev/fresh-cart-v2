@@ -66,7 +66,9 @@ export default function Page() {
         <div className={styles.group}>
           <p>Email: {currentUser.email}</p>
           <p>Member Since: {joinedDate}</p>
-          <p>Address: {currentUser.addressLine1}</p>
+          <p>
+            Address: {currentUser.addressLine1 && `${currentUser.addressLine1}`}
+          </p>
           <div className={styles.links}>
             <Link href='/account/addresses'>Edit Address</Link>
             <Link href='/orders'>View Orders (Coming Soon)</Link>
