@@ -43,7 +43,7 @@ export default async function Page({
   const chunkedArr = sliceArray(productRows, 3);
 
   return (
-    <main className={styles.productsContainer}>
+    <main className={styles.productsPage}>
       {chunkedArr.map((chunk, index) => (
         <div key={index} className={styles.productRow}>
           {chunk.map((product) => (
