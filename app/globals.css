@@ -18,7 +18,7 @@ body {
   display: flex;
   flex-direction: column;
   font-family: var(--font-exo2), sans-serif;
-  background-color: var(--warm-beige);
+  background-color: var(--white);
   color: var(--text-dark);
 }
 
