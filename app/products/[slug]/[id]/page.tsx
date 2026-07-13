@@ -56,7 +56,7 @@ export default async function Page({
           <div className={styles.productInfoContainer}>
             <h1>{product.productName}</h1>
             <p>{product.productDetails}</p>
-            <p>${product.productPrice}</p>
+            <p className={styles.priceText}>${product.productPrice}</p>
             <ProductDetail
               product={product}
               isSignIn={isSignIn}

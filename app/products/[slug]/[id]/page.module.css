@@ -1,11 +1,13 @@
 .detailPageContainer {
     display: flex;
     flex-direction: column;
-    padding: 4rem 0 8rem;
+    padding: 4rem 1rem 8rem;
 }
 
 .linkContainer {
-    margin-left: 300px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .link {
@@ -14,6 +16,7 @@
 
 .productContainer {
     display: flex;
+    align-items: center;
     justify-content: center;
     max-width: 800px;
     width: 100%;
@@ -23,7 +26,7 @@
 .productInfoContainer {
     max-width: 400px;
     width: 100%;
-    margin-left: 50px;
+    margin-left: 7rem;
 }
 
 .buttonContainer {
@@ -73,4 +76,30 @@
     cursor: pointer;
     transition: opacity 0.2s;
     text-decoration: none;
+}
+
+.priceText {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+@media (max-width: 740px) {
+    .detailPageContainer {
+        padding: 2rem 1rem 5rem;
+    }
+
+    .productContainer {
+        flex-direction: column;
+        margin-top: 2rem;
+    }
+
+    .productInfoContainer {
+        max-width: 100%;
+        margin-left: 0;
+        margin-top: 2rem;
+    }
+
+    .buttonContainer {
+        flex-wrap: wrap;
+    }
 }
