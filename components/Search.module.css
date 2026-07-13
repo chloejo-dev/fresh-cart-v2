@@ -43,6 +43,7 @@
 }
 
 .suggestedWordButton {
+    background-color: transparent;
     font-family: inherit;
     font-size: 1rem;
     border: none;
