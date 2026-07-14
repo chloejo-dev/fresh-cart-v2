@@ -70,7 +70,9 @@ export default function Page() {
             Address: {currentUser.addressLine1 && `${currentUser.addressLine1}`}
           </p>
           <div className={styles.links}>
-            <Link href='/account/addresses'>Edit Address</Link>
+            <Link href='/account/addresses'>
+              {currentUser.addressLine1 ? "Edit Address" : "Add Address"}
+            </Link>
             <Link href='/orders'>View Orders (Coming Soon)</Link>
           </div>
         </div>
