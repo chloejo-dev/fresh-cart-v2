@@ -157,6 +157,7 @@ export default function CheckoutClient({
     0,
   );
 
+  // Calculate shipping fee
   const shippingFee = subtotal >= 50 ? 0.0 : 7.5;
 
   // Calculate tax
@@ -164,6 +165,16 @@ export default function CheckoutClient({
 
   // Calculate total amount
   const orderTotal = subtotal + shippingFee + totalTax;
+
+  // Calculate delivery ETA
+  const deliveryDate = new Date();
+  deliveryDate.setDate(deliveryDate.getDate() + 2);
+
+  const formattedDeliveryDate = deliveryDate.toLocaleDateString("en-CA", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   return (
     <main className={styles.checkoutPage}>
@@ -218,7 +229,7 @@ export default function CheckoutClient({
           <Link href='/account/payment-methods'>Change</Link>
         </div>
         <div className={styles.deliveryInfo}>
-          <h2>Arriving Jun 29, 2026</h2>
+          <h2>Arriving on {formattedDeliveryDate}</h2>
         </div>
       </section>
       <section className={styles.orderSummary}>
