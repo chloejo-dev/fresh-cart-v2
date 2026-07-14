@@ -157,7 +157,7 @@ export default function CheckoutClient({
     0,
   );
 
-  const shippingFee = 0.0;
+  const shippingFee = subtotal >= 50 ? 0.0 : 7.5;
 
   // Calculate tax
   const totalTax = subtotal * 0.15;
@@ -214,7 +214,7 @@ export default function CheckoutClient({
           ))}
         </div>
         <div className={styles.paymentMethod}>
-          <h2>Paying with 1234</h2>
+          <h2>Paying with **34</h2>
           <Link href='/change'>Change</Link>
         </div>
         <div className={styles.deliveryInfo}>
