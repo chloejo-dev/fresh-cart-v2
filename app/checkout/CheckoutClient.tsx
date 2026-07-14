@@ -215,7 +215,7 @@ export default function CheckoutClient({
         </div>
         <div className={styles.paymentMethod}>
           <h2>Paying with **34</h2>
-          <Link href='/change'>Change</Link>
+          <Link href='/account/payment-methods'>Change</Link>
         </div>
         <div className={styles.deliveryInfo}>
           <h2>Arriving Jun 29, 2026</h2>

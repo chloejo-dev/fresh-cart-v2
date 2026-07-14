@@ -1,0 +1,12 @@
+.paymentMethodsPage {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1rem;
+    padding: 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
