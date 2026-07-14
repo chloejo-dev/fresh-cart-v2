@@ -1,36 +1,163 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fresh Cart
 
-## Getting Started
+A full-stack grocery e-commerce application built with Next.js, TypeScript, and MySQL.
 
-First, run the development server:
+---
+
+## 📺 Live Demo
+
+[Fresh Cart](https://fresh-cart-v2-eta.vercel.app/)
+
+---
+
+## 🎯 Problem
+
+Online grocery shoppers expect a seamless experience across devices, including product search, cart management, and checkout. Maintaining cart data across authentication states and providing a responsive user experience are also important challenges for modern e-commerce applications.
+
+---
+
+## 💡 Solution
+
+Fresh Cart is a full-stack grocery e-commerce application built with Next.js and MySQL. It provides product browsing, search, authentication, cart management, address management, and checkout functionality while focusing on responsive design and a seamless user experience.
+
+---
+
+## 🛠 Tech Stack
+
+- Frontend: TypeScript, React, Next.js
+- Backend: Next.js Route Handlers (REST API)
+- Database: MySQL
+- Deployment: Vercel, Railway
+
+---
+
+## 🚀 Features
+
+- Browse products by category and view product details
+- Search products and view search results
+- Add products to the cart and complete checkout
+- Merge guest cart items after sign-in
+- Sign up and sign in securely
+- Add and manage shipping addresses
+
+---
+
+## 📸 Screenshots
+
+### Main Page
+
+![Main](./screenshots/main.jpg)
+
+### Product List
+
+![Product List](./screenshots/products_meat.jpg)
+
+### Product Detail
+
+![Product Detail](./screenshots/products_detail.jpg)
+
+### Search & Search Results
+
+![Search](./screenshots/search.jpg)
+
+![Search Results](./screenshots/search_results.jpg)
+
+### Cart
+
+![Cart](./screenshots/cart.jpg)
+
+### Checkout
+
+![Checkout](./screenshots/checkout.jpg)
+
+---
+
+## 📈 Challenges & Solutions
+
+### Preserving Guest Cart Items
+
+**Problem:**
+Guest cart items are lost when users sign in because guest and authenticated carts are managed separately.
+
+**Solution:**
+Store guest cart items in localStorage and merge them with the user’s cart after sign-in, allowing users to continue shopping seamlessly.
+
+---
+
+### Preventing Open Redirects
+
+**Problem:**
+Using unvalidated redirect URLs can expose users to phishing attacks and credential theft.
+
+**Solution:**
+Implement a redirect map and allow navigation only to predefined routes.
+
+---
+
+### Handling Failed Order Requests
+
+**Problem:**
+The "Placing Order..." button remains disabled when order creation fails, preventing users from retrying the checkout process.
+
+**Solution:**
+Add a finally block and reset the submitting state so that users can retry the checkout process after a failed order request.
+
+---
+
+## 🔮 Future Improvements
+
+- Redesign the Account Dashboard with a card-based layout
+- Implement an Order Details page
+- Add Reorder, Payment Processing, and Buy Now functionality
+
+---
+
+## 📦 Installation / Setup
+
+1. Clone the repository.
+
+```bash
+git clone https://github.com/chloejo-dev/fresh-cart-v2.git
+```
+
+2. Navigate to the project directory.
+
+```bash
+cd fresh-cart-v2
+```
+
+3. Install dependencies.
+
+```bash
+npm install
+```
+
+4. Create a `.env.local` file and add the required environment variables.
+
+```env
+DB_HOST=
+DB_PORT=
+DB_USER=
+DB_PASSWORD=
+DB_NAME=
+JWT_SECRET=
+```
+
+5. Start the development server.
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+6. Open your browser and visit:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 👤 Author
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Chloe Jo
+GitHub: [chloejo-dev](https://github.com/chloejo-dev)
