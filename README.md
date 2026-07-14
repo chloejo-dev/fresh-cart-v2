@@ -159,5 +159,5 @@ http://localhost:3000
 
 ## 👤 Author
 
-Chloe Jo
-GitHub: [chloejo-dev](https://github.com/chloejo-dev)
+- Chloe Jo
+- GitHub: [chloejo-dev](https://github.com/chloejo-dev)
