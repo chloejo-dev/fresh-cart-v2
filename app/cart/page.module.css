@@ -5,58 +5,69 @@
     align-items: center;
 }
 
-.loadingMessage {
-    font-size: 1.5rem;
-}
-
 .emptyCartMessage {
     font-size: 2rem;
 }
 
 .cartPage {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 10rem;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 48px;
+
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(280px, 1fr);
+    align-items: start;
+    gap: 96px;
 }
 
 .cartContainer {
+    min-width: 0;
     display: flex;
     flex-direction: column;
     /* align-items: center -> move the entire content to the center */
     /* align-items: center; */
-    margin: 50px 0px;
+    padding: 20px;
 }
 
 .productRow {
-    display: flex;
-    /* align-items: center -> align the image and info container in the middle*/
+    width: 100%;
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
     align-items: center;
-    margin-bottom: 100px;
-    gap: 5rem;
-    width: 100%;
-    max-width: 850px;
-}
-
-.productContainer {
-    flex: 1;
-}
-
-.productInfoContainer {
-    width: 100%;
-}
-
-.productDescContainer {
-    display: flex;
-    justify-content: space-between;
-    gap: 10rem;
-
+    gap: 80px;
+    padding: 48px 0;
 }
 
 .productImage {
     width: 200px;
     height: 150px;
     object-fit: contain;
+}
+
+.productContainer {
+    min-width: 0;
+}
+
+.productInfoContainer {
+    width: 100%;
+    min-width: 0;
+}
+
+.productDescContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+
+}
+
+.productName {
+    color: black;
+    text-decoration: none;
+}
+
+.productPrice {
+    flex-shrink: 0;
 }
 
 .buttonContainer {
@@ -66,8 +77,9 @@
 .subtotalContainer {
     display: flex;
     flex-direction: column;
-    margin-top: 10rem;
     gap: 0.5rem;
+    padding: 20px;
+    margin-top: 70px;
 
 }
 
@@ -76,6 +88,7 @@
 }
 
 .checkOutButton {
+    width: 100%;
     font-family: inherit;
     font-size: 1rem;
     background-color: var(--accent-orange);
@@ -90,4 +103,84 @@
 
 .checkOutButton:hover {
     opacity: 0.8;
+}
+
+.deleteButton,
+.saveButton {
+    font-family: inherit;
+    text-decoration: underline;
+    border: none;
+    cursor: pointer;
+}
+
+@media (max-width: 1100px) {
+    .cartPage {
+        padding: 40px 32px;
+        gap: 48px;
+        grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr);
+    }
+
+    .productRow {
+        grid-template-columns: 160px minmax(0, 1fr);
+        gap: 32px;
+        padding: 36px 0;
+    }
+
+    .productImage {
+        width: 160px;
+        height: 120px;
+    }
+
+    .subtotalContainer {
+        padding: 16px;
+    }
+
+    .checkOutButton {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 740px) {
+    .cartPage {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 24px 16px;
+    }
+
+    .cartContainer {
+        margin: 0;
+        padding: 0;
+    }
+
+    .productRow {
+        grid-template-columns: 120px minmax(0, 1fr);
+        gap: 16px;
+        padding: 24px 0;
+    }
+
+    .productImage {
+        width: 120px;
+        height: 100px;
+    }
+
+    .productDescContainer {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .buttonContainer {
+        gap: 8px;
+    }
+
+    .subtotalContainer {
+        width: 100%;
+        padding: 16px;
+        margin-top: 0;
+    }
+
+    .checkOutButton {
+        width: 100%;
+        padding: 10px 16px;
+    }
 }
