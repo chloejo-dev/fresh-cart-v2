@@ -40,6 +40,7 @@
 
 .cartButton {
     font-family: inherit;
+    font-size: 0.9rem;
     color: white;
     background-color: var(--primary-green);
     padding: 10px;
@@ -51,6 +52,7 @@
 
 .buyButton {
     font-family: inherit;
+    font-size: 0.9rem;
     color: white;
     background-color: var(--vivid-green);
     padding: 10px;
