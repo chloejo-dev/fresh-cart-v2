@@ -1,6 +1,6 @@
 /* Hero Section */
 .hero {
-    min-height: calc(100vh-120px);
+    min-height: calc(100vh - 120px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -27,7 +27,7 @@
     border: none;
     padding: 15px 35px;
     color: white;
-    font-size: 18px;
+    font-size: 1rem;
     font-weight: bold;
     border-radius: 30px;
     cursor: pointer;
@@ -38,4 +38,15 @@
 
 .ctaMain:hover {
     opacity: 0.9;
+}
+
+@media(max-width: 740px) {
+    .hero {
+        min-height: 70vh;
+    }
+
+    .title {
+        font-size: 2rem;
+        padding: 15px 28px;
+    }
 }
