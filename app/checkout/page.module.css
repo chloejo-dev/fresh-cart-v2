@@ -1,12 +1,19 @@
 .checkoutPage {
-    display: flex;
-    justify-content: center;
+    width: 100%;
+    max-width: 1400px;
     min-height: 60vh;
-    gap: 2rem;
+    margin: 0 auto;
+    padding: 48px;
+
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(280px, 1fr);
+    align-items: start;
+    gap: 64px;
+
 }
 
 .orderDetails {
-    width: 60%;
+    min-width: 0;
     padding: 2rem;
 }
 
@@ -18,13 +25,14 @@
 
 .orderItemRow {
     display: grid;
-    grid-template-columns: 100px 1fr 80px 120px;
+    grid-template-columns: 100px minmax(0, 1fr) 80px 120px;
     align-items: center;
     column-gap: 2rem;
 }
 
 .orderSummary {
     padding: 2rem;
+    margin-top: 20px;
 }
 
 .orderSummaryDetails {
@@ -69,4 +77,49 @@
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
+}
+
+@media (max-width: 1100px) {
+    .checkoutPage {
+        grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr);
+        gap: 40px;
+        padding: 40px 32px;
+    }
+
+    .orderItemRow {
+        grid-template-columns: 80px minmax(0, 1fr) 70px 90px;
+        column-gap: 1rem;
+    }
+
+    .productImage {
+        width: 80px;
+        height: 80px;
+    }
+
+    .quantityControls {
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 740px) {
+    .checkoutPage {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 24px 16px;
+    }
+
+    .orderDetails {
+        padding: 0;
+    }
+
+    .orderSummary {
+        width: 100%;
+        margin-top: 0;
+        padding: 16px;
+    }
+
+    .orderButton {
+        width: 100%;
+        padding: 10px 16px;
+    }
 }
