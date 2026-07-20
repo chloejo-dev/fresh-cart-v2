@@ -72,6 +72,7 @@
 
 .buttonContainer {
     margin-top: 20px;
+    display: flex;
 }
 
 .subtotalContainer {
@@ -127,6 +128,10 @@
         padding: 36px 0;
     }
 
+    .buttonContainer {
+        flex-direction: column;
+    }
+
     .productImage {
         width: 160px;
         height: 120px;
@@ -142,7 +147,7 @@
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 740px) {
     .cartPage {
         grid-template-columns: 1fr;
         gap: 24px;

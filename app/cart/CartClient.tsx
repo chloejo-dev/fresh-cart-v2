@@ -365,33 +365,37 @@ export default function CartClient({ initialCart, isSignIn }: CartProps) {
                 </div>
 
                 <div className={styles.buttonContainer}>
-                  <button
-                    type='button'
-                    onClick={() => decreaseQty(item.productId)}
-                  >
-                    {item.productQuantity === 1 ? <Trash2 /> : <Minus />}
-                  </button>
-                  <span>{item.productQuantity}</span>
-                  <button
-                    type='button'
-                    onClick={() => increaseQty(item.productId)}
-                  >
-                    <Plus />
-                  </button>
-                  <button
-                    className={styles.deleteButton}
-                    onClick={() => deleteItem(item.productId)}
-                    type='button'
-                  >
-                    Delete
-                  </button>
-                  <button
-                    className={styles.saveButton}
-                    onClick={saveItems}
-                    type='button'
-                  >
-                    Save for Later
-                  </button>
+                  <div className={styles.quantityControls}>
+                    <button
+                      type='button'
+                      onClick={() => decreaseQty(item.productId)}
+                    >
+                      {item.productQuantity === 1 ? <Trash2 /> : <Minus />}
+                    </button>
+                    <span>{item.productQuantity}</span>
+                    <button
+                      type='button'
+                      onClick={() => increaseQty(item.productId)}
+                    >
+                      <Plus />
+                    </button>
+                  </div>
+                  <div className={styles.actionButtons}>
+                    <button
+                      className={styles.deleteButton}
+                      onClick={() => deleteItem(item.productId)}
+                      type='button'
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className={styles.saveButton}
+                      onClick={saveItems}
+                      type='button'
+                    >
+                      Save for Later
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
