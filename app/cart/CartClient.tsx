@@ -314,7 +314,7 @@ export default function CartClient({ initialCart, isSignIn }: CartProps) {
   };
 
   const saveItems = () => {
-    router.push("/save");
+    router.push("/saved-items");
   };
 
   // User has no items in their cart
