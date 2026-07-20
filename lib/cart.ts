@@ -7,6 +7,7 @@ type CartItem = RowDataPacket & {
   productPrice: number;
   productPic: string;
   productQuantity: number;
+  categorySlug: string;
 };
 
 export async function getCartQuantity(
@@ -29,8 +30,9 @@ export async function getCartItems(userId: number): Promise<CartItem[]> {
     `SELECT
     products.product_id AS productId,
     products.product_name AS productName,
-     products.product_pic AS productPic,
+    products.product_pic AS productPic,
     products.product_price AS productPrice,
+    products.category_slug AS categorySlug,
     cart.quantity AS productQuantity
     FROM cart
     INNER JOIN products

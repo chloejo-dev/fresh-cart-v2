@@ -11,6 +11,7 @@ type Product = {
   productPrice: number;
   productDetails: string;
   productPic: string;
+  categorySlug: string;
 };
 
 // Props type sent from server
@@ -27,6 +28,7 @@ type GuestProduct = {
   productPrice: number;
   productPic: string;
   productQuantity: number;
+  categorySlug: string;
 };
 
 type CartStatus = "idle" | "updated" | "added" | "error" | "viewCart";
@@ -157,6 +159,7 @@ export default function ProductDetail({
             productPic: product.productPic,
             productPrice: product.productPrice,
             productQuantity: quantity,
+            categorySlug: product.categorySlug,
           });
 
           localStorage.setItem("cart", JSON.stringify(guestCart));
@@ -182,6 +185,7 @@ export default function ProductDetail({
             productPic: product.productPic,
             productPrice: product.productPrice,
             productQuantity: quantity,
+            categorySlug: product.categorySlug,
           });
           setCartStatus("added");
         } else {

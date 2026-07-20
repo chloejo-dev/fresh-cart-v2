@@ -7,6 +7,7 @@ type Product = RowDataPacket & {
   productPrice: number;
   productDetails: string;
   productPic: string;
+  categorySlug: string;
 };
 
 // Get single product data
@@ -20,7 +21,8 @@ export async function getProduct(
     product_name AS productName,
     product_price AS productPrice,
     product_details AS productDetails,
-    product_pic AS productPic
+    product_pic AS productPic,
+    category_slug AS categorySlug
     FROM products
     WHERE category_slug = ?
     AND product_id = ?`,

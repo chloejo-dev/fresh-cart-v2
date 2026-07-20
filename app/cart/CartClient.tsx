@@ -6,6 +6,7 @@ import { Trash2, Plus, Minus } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type CartItem = {
   productId: number;
@@ -13,6 +14,7 @@ type CartItem = {
   productPrice: number;
   productPic: string;
   productQuantity: number;
+  categorySlug: string;
 };
 
 type CartProps = {
@@ -311,6 +313,10 @@ export default function CartClient({ initialCart, isSignIn }: CartProps) {
     router.push("/checkout");
   };
 
+  const saveItems = () => {
+    router.push("/save");
+  };
+
   // User has no items in their cart
   if (cartArr.length === 0) {
     return (
@@ -331,7 +337,7 @@ export default function CartClient({ initialCart, isSignIn }: CartProps) {
     <main className={styles.cartPage}>
       <div className={styles.cartContainer}>
         <div>
-          <h1>Cart</h1>
+          <h1>Shopping Cart</h1>
         </div>
         {cartArr.map((item) => (
           <div key={item.productId} className={styles.productRow}>
@@ -345,8 +351,13 @@ export default function CartClient({ initialCart, isSignIn }: CartProps) {
             <div className={styles.productContainer}>
               <div className={styles.productInfoContainer}>
                 <div className={styles.productDescContainer}>
-                  <div className={styles.productTitle}>
-                    <span>{item.productName}</span>
+                  <div>
+                    <Link
+                      href={`/products/${item.categorySlug}/${item.productId}`}
+                      className={styles.productName}
+                    >
+                      {item.productName}
+                    </Link>
                   </div>
                   <div className={styles.productPrice}>
                     <span>${item.productPrice}</span>
@@ -374,8 +385,12 @@ export default function CartClient({ initialCart, isSignIn }: CartProps) {
                   >
                     Delete
                   </button>
-                  <button className={styles.saveButton} type='button'>
-                    Save for later
+                  <button
+                    className={styles.saveButton}
+                    onClick={saveItems}
+                    type='button'
+                  >
+                    Save for Later
                   </button>
                 </div>
               </div>
