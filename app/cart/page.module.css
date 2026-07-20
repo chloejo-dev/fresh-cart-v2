@@ -111,6 +111,7 @@
     text-decoration: underline;
     border: none;
     cursor: pointer;
+    background-color: transparent;
 }
 
 @media (max-width: 1100px) {
@@ -141,7 +142,7 @@
     }
 }
 
-@media (max-width: 740px) {
+@media (max-width: 700px) {
     .cartPage {
         grid-template-columns: 1fr;
         gap: 24px;
