@@ -46,6 +46,7 @@
 
 .orderButton {
     font-family: inherit;
+    font-size: 1rem;
     background-color: var(--accent-orange);
     color: white !important;
     padding: 10px 20px;
@@ -53,10 +54,16 @@
     border-radius: 20px;
     transition: opacity 0.2s;
     margin-bottom: 0.5rem;
+    cursor: pointer;
 }
 
 .orderButton:hover {
     opacity: 0.7;
+}
+
+.orderButton:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 .productImage {
@@ -121,5 +128,34 @@
     .orderButton {
         width: 100%;
         padding: 10px 16px;
+    }
+
+    .orderItemRow {
+        grid-template-columns: 100px minmax(0, 1fr);
+        grid-template-areas:
+            "image name"
+            "image price"
+            "image quantity";
+        column-gap: 16px;
+        row-gap: 8px;
+        padding: 20px 0;
+    }
+
+    .productImage {
+        grid-area: image;
+    }
+
+    .productName {
+        grid-area: name;
+    }
+
+    .quantityControls {
+        grid-area: quantity;
+        justify-content: flex-start;
+    }
+
+    .productPrice {
+        grid-area: price;
+        text-align: left;
     }
 }
