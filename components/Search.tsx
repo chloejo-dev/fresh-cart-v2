@@ -148,7 +148,7 @@ export default function Search() {
           type='text'
           aria-label='Search products'
           placeholder='Search Fresh Cart'
-          className={styles.searchBar}
+          className={styles.searchInput}
           value={searchWord}
           onChange={(e) => {
             const value = e.target.value;
