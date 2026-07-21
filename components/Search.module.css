@@ -47,11 +47,12 @@
     min-width: 0;
     text-align: left;
     white-space: normal;
+    word-break: normal;
+    overflow-wrap: normal;
     background-color: transparent;
     font-family: inherit;
     font-size: 1rem;
     border: none;
-    overflow-wrap: anywhere;
 }
 
 .searchButton {
@@ -83,5 +84,9 @@
 @media (max-width: 740px) {
     .searchInput {
         font-size: 16px;
+    }
+
+    .suggestionList {
+        padding: 0.75rem 0.5rem;
     }
 }
