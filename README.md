@@ -1,6 +1,6 @@
 # Fresh Cart v2
 
-A full-stack grocery e-commerce application built with Next.js, TypeScript, and MySQL.
+A full-stack grocery e-commerce application built with TypeScript, React, Next.js, and MySQL.
 
 ---
 
@@ -10,25 +10,22 @@ A full-stack grocery e-commerce application built with Next.js, TypeScript, and 
 
 ---
 
-## 🎯 Problem
+## 🎯 Why I Built This Project
 
-Online grocery shoppers expect a seamless experience across devices, including product search, cart management, and checkout. Maintaining cart data across authentication states and providing a responsive user experience are also important challenges for modern e-commerce applications.
-
----
-
-## 💡 Solution
-
-Fresh Cart is a full-stack grocery e-commerce application built with Next.js and MySQL. It provides product browsing, search, authentication, cart management, address management, and checkout functionality while focusing on responsive design and a seamless user experience.
+Through coursework and academic projects, I've developed a strong foundation in web development.
+However, I wanted to go beyond assignments and build my own application from scratch to deepen my understanding and gain hands-on experience with the end-to-end development process, from relational database design and REST API development to automated testing and cloud deployment.
 
 ---
 
 ## 🛠 Tech Stack
 
 - Frontend: TypeScript, React, Next.js
-- Backend: Next.js Route Handlers (REST API)
+- Backend: Next.js Route Handlers (REST APIs)
 - Database: MySQL
-- Deployment: Vercel (Public Demo), AWS EC2
+- Testing: Jest, React Testing Library
+- Deployment: Vercel (Public Demo), Railway, AWS EC2, Nginx (Reverse Proxy)
 - Containerization: Docker, Docker Compose
+- Version Control: Git, GitHub
 
 ---
 
@@ -36,7 +33,7 @@ Fresh Cart is a full-stack grocery e-commerce application built with Next.js and
 
 ### Public Demo
 
-- Deployed the application to Vercel for public access
+- The public demo is available on Vercel.
 
 ### Cloud Deployment Experience
 
@@ -52,7 +49,7 @@ Fresh Cart is a full-stack grocery e-commerce application built with Next.js and
 - Browse products by category and view product details
 - Search products with search suggestions and view search results
 - Add products to the cart and complete checkout
-- Merge guest cart items after sign-in
+- Merge guest cart items after a successful sign-in
 - Sign up and sign in securely
 - Add and manage shipping addresses
 
@@ -88,7 +85,7 @@ Fresh Cart is a full-stack grocery e-commerce application built with Next.js and
 
 ---
 
-## 📈 Challenges & Solutions
+## 📈 Major Challenges & Solutions
 
 ### Preserving Guest Cart Items
 
