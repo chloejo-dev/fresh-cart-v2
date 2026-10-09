@@ -59,29 +59,29 @@ However, I wanted to go beyond assignments and build my own application from scr
 
 ### Main Page
 
-![Main](./screenshots/main.jpg)
+![Main](./screenshots/after_main.jpg)
 
 ### Product List
 
-![Product List](./screenshots/products_meat.jpg)
+![Product List](./screenshots/after_products_meat.jpg)
 
 ### Product Detail
 
-![Product Detail](./screenshots/products_detail.jpg)
+![Product Detail](./screenshots/after_products_detail.jpg)
 
 ### Search & Search Results
 
-![Search](./screenshots/search.jpg)
+![Search](./screenshots/after_search.jpg)
 
-![Search Results](./screenshots/search_results.jpg)
+![Search Results](./screenshots/after_search_results.jpg)
 
 ### Cart
 
-![Cart](./screenshots/cart.jpg)
+![Cart](./screenshots/after_cart.jpg)
 
 ### Checkout
 
-![Checkout](./screenshots/checkout.jpg)
+![Checkout](./screenshots/after_checkout.jpg)
 
 ---
 
