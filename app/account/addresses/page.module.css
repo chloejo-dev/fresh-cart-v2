@@ -98,3 +98,7 @@
 .saveButton:hover {
     opacity: 0.9;
 }
+
+.errorMsg {
+    color: red;
+}

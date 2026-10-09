@@ -181,7 +181,9 @@ export default function Page() {
               onChange={(e) => setRecipientName(e.target.value)}
             ></input>
           </div>
-          {errors.recipientName && <p>{errors.recipientName}</p>}
+          {errors.recipientName && (
+            <p className={styles.errorMsg}>{errors.recipientName}</p>
+          )}
           <div className={styles.formGroup}>
             <label htmlFor='addressLine1'>Street address*</label>
             <input
@@ -195,7 +197,9 @@ export default function Page() {
               onChange={(e) => setAddressLine1(e.target.value)}
             ></input>
           </div>
-          {errors.addressLine1 && <p>{errors.addressLine1}</p>}
+          {errors.addressLine1 && (
+            <p className={styles.errorMsg}>{errors.addressLine1}</p>
+          )}
           <div className={styles.formGroup}>
             <label htmlFor='addressLine2'>Apt, suite, etc</label>
             <input
@@ -207,7 +211,9 @@ export default function Page() {
               onChange={(e) => setAddressLine2(e.target.value)}
             ></input>
           </div>
-          {errors.addressLine2 && <p>{errors.addressLine2}</p>}
+          {errors.addressLine2 && (
+            <p className={styles.errorMsg}>{errors.addressLine2}</p>
+          )}
           <div className={styles.formGroup}>
             <label htmlFor='city'>City*</label>
             <input
@@ -219,7 +225,7 @@ export default function Page() {
               onChange={(e) => setCity(e.target.value)}
             ></input>
           </div>
-          {errors.city && <p>{errors.city}</p>}
+          {errors.city && <p className={styles.errorMsg}>{errors.city}</p>}
           <div className={styles.addressGroup}>
             <div className={styles.provinceGroup}>
               <label htmlFor='province'>Province/Territory*</label>
@@ -240,7 +246,9 @@ export default function Page() {
                 ))}
               </select>
             </div>
-            {errors.province && <p>{errors.province}</p>}
+            {errors.province && (
+              <p className={styles.errorMsg}>{errors.province}</p>
+            )}
             <div className={styles.postalCodeGroup}>
               <label htmlFor='postalCode'>Postal Code*</label>
               <input
@@ -253,7 +261,9 @@ export default function Page() {
                 onChange={(e) => setPostalCode(e.target.value)}
               ></input>
             </div>
-            {errors.postalCode && <p>{errors.postalCode}</p>}
+            {errors.postalCode && (
+              <p className={styles.errorMsg}>{errors.postalCode}</p>
+            )}
           </div>
           <div className={styles.formGroup}>
             <label htmlFor='phone'>Phone Number*</label>
@@ -267,12 +277,14 @@ export default function Page() {
               onChange={(e) => setPhoneNumber(e.target.value)}
             ></input>
           </div>
-          {errors.phoneNumber && <p>{errors.phoneNumber}</p>}
+          {errors.phoneNumber && (
+            <p className={styles.errorMsg}>{errors.phoneNumber}</p>
+          )}
           <div className={styles.buttonContainer}>
             <Link href='/account' className={styles.cancelButton}>
               Cancel
             </Link>
-            {errors.form && <p>{errors.form}</p>}
+            {errors.form && <p className={styles.errorMsg}>{errors.form}</p>}
             <button
               type='submit'
               className={styles.saveButton}
