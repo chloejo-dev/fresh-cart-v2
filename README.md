@@ -57,7 +57,7 @@ However, I wanted to go beyond assignments and build my own application from scr
 
 ## 📸 Screenshots
 
-### Main Page
+### Homepage
 
 ![Main](./screenshots/after_main.jpg)
 
