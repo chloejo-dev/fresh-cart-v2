@@ -10,7 +10,7 @@ A full-stack grocery e-commerce application built with TypeScript, React, Next.j
 
 ---
 
-## 🎯 Why I Built This Project
+## 🎯 Why I Started This Project
 
 Through coursework and academic projects, I've developed a strong foundation in web development.
 However, I wanted to go beyond assignments and build my own application from scratch to deepen my understanding and gain hands-on experience with the end-to-end development process, from relational database design and REST API development to automated testing and cloud deployment.

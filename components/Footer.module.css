@@ -1,27 +1,40 @@
 .footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
     background-color: var(--primary-green);
     color: var(--white);
-    padding: 20px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+    padding: 32px;
+    gap: 50px;
 }
-
 
 .brand {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
+    height: 48px;
     font-size: 20px;
     font-weight: bold;
 }
 
+.logoImage {
+    height: 48px;
+    width: auto;
+}
+
+.bottomMenu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
 .links {
     display: flex;
-    gap: 25px;
+    align-items: center;
+    gap: 40px;
+    min-height: 48px;
     flex-wrap: wrap;
-    justify-content: center;
 }
 
 .links a {
@@ -36,7 +49,46 @@
 }
 
 .info {
-    text-align: center;
+    display: flex;
+    gap: 30px;
     font-size: 12px;
     opacity: 0.8;
+}
+
+.info p {
+    margin: 0;
+}
+
+@media (max-width: 740px) {
+    .footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .brand {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    .bottomMenu {
+        width: 100%;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .links {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        min-height: auto;
+    }
+
+    .info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        text-align: center;
+    }
 }

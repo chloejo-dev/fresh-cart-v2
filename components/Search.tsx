@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import styles from "./Search.module.css";
-import { X } from "lucide-react";
+import { X, SearchIcon } from "lucide-react";
 
 type ProductSuggestion = {
   searchKeyword: string;
@@ -202,7 +202,7 @@ export default function Search() {
       </div>
 
       <button type='submit' className={styles.searchButton} aria-label='Search'>
-        🔍
+        <SearchIcon />
       </button>
     </form>
   );

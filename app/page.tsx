@@ -6,7 +6,7 @@ export default function Home() {
     <main className={styles.hero}>
       <div className={styles.heroContent}>
         <h1 className={styles.title}>Freshness Delivered to Your Door.</h1>
-        <p>Support local farmers and get 20% off your first reorder.</p>
+        <p>Support local farmers and get 20% off your first order.</p>
         <br />
         <Link href='/products/fresh-produce' className={styles.ctaMain}>
           Shop Now

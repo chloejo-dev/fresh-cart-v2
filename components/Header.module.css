@@ -4,7 +4,7 @@
     grid-template-columns:
         minmax(max-content, 1fr) minmax(280px, 1100px) minmax(max-content, 1fr);
     align-items: center;
-    column-gap: clamp(8px, 2vw, 24px);
+    column-gap: clamp(16px, 3vw, 48px);
     padding: 12px clamp(16px, 5vw, 60px);
     background-color: var(--white);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -21,8 +21,10 @@
 
 .center {
     width: 100%;
+    max-width: 800px;
     min-width: 0;
     display: flex;
+    justify-self: center;
 }
 
 .right {
@@ -42,8 +44,10 @@
     color: var(--primary-green);
 }
 
+/* User menu */
 .userMenu {
     display: flex;
+    justify-content: center;
     align-items: center;
     gap: clamp(10px, 1.5vw, 20px);
     flex-wrap: nowrap;
@@ -74,13 +78,19 @@
     opacity: 0.7;
 }
 
+.cartLink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .categoryStrip {
     background-color: var(--primary-green);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 10px 20px;
-    gap: 20px;
+    gap: 32px;
     flex-wrap: wrap;
 }
 
@@ -121,6 +131,10 @@
         width: 100%;
         justify-self: stretch;
         justify-content: center;
+    }
+
+    .categoryStrip {
+        gap: 20px;
     }
 
     .userMenu {

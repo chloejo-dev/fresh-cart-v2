@@ -16,15 +16,17 @@ export default function Footer() {
           />
           <span>Fresh Cart</span>
         </div>
-        <div className={styles.links}>
-          <Link href='/products/fresh-produce'>Fresh Produce</Link>
-          <Link href='/products/meat'>Meat</Link>
-          <Link href='/products/seafood'>Seafood</Link>
-          <Link href='/products/dairy'>Dairy</Link>
-        </div>
-        <div className={styles.info}>
-          <p>© 2026 Fresh Cart Inc.</p>
-          <p>123 Green Street, Moncton, NB, Canada</p>
+        <div className={styles.bottomMenu}>
+          <div className={styles.links}>
+            <Link href='/products/fresh-produce'>Fresh Produce</Link>
+            <Link href='/products/meat'>Meat</Link>
+            <Link href='/products/seafood'>Seafood</Link>
+            <Link href='/products/dairy'>Dairy</Link>
+          </div>
+          <div className={styles.info}>
+            <p>© 2026 Fresh Cart Inc.</p>
+            <p>123 Green Street, Moncton, NB, Canada</p>
+          </div>
         </div>
       </footer>
     </>

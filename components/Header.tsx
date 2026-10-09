@@ -5,6 +5,7 @@ import Search from "./Search";
 import styles from "@/components/Header.module.css";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { ShoppingCart } from "lucide-react";
 
 export default function Header() {
   const [isSignIn, setIsSignIn] = useState(false);
@@ -75,12 +76,9 @@ export default function Header() {
                 Sign In
               </Link>
             )}
-
-            <div className={styles.cartIcon}>
-              <Link href='/cart'>
-                🛒 <span id='cart-total'></span>
-              </Link>
-            </div>
+            <Link href='/cart' className={styles.cartLink}>
+              <ShoppingCart size={25} />
+            </Link>
           </nav>
         </div>
       </header>
