@@ -133,7 +133,7 @@ export default function SignInForm() {
                 autoComplete='email'
                 onChange={(e) => setEmail(e.target.value)}
               ></input>
-              {emailError && <p>{emailError}</p>}
+              {emailError && <p className={styles.errorMsg}>{emailError}</p>}
               <label htmlFor='password'>Password:</label>
               <input
                 id='password'
@@ -143,9 +143,11 @@ export default function SignInForm() {
                 autoComplete='current-password'
                 onChange={(e) => setPassword(e.target.value)}
               ></input>
-              {passwordError && <p>{passwordError}</p>}
+              {passwordError && (
+                <p className={styles.errorMsg}>{passwordError}</p>
+              )}
             </div>
-            {signInErr && <p>{signInErr}</p>}
+            {signInErr && <p className={styles.errorMsg}>{signInErr}</p>}
           </div>
           <button type='submit' className={styles.signInButton}>
             Sign In

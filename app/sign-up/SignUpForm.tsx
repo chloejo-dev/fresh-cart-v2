@@ -44,7 +44,7 @@ export default function Page() {
       // Password should contain at least one special character  e.g. #, %, $...
     } else if (!hasSpecialCharacter) {
       inputPasswordError =
-        "Password should include at least one special character(e.g. #, $, %...)";
+        "Password should include at least one special character (e.g. #, $, %...)";
     }
   }
   // confirmPassword === password
@@ -168,7 +168,7 @@ export default function Page() {
               onChange={(e) => setEmail(e.target.value)}
             ></input>
           </div>
-          {emailError && <p>{emailError}</p>}
+          {emailError && <p className={styles.errorMsg}>{emailError}</p>}
           <div className={styles.formGroup}>
             <label htmlFor='password'>Enter password:</label>
             <input
@@ -181,7 +181,9 @@ export default function Page() {
               onChange={(e) => setPassword(e.target.value)}
             ></input>
           </div>
-          {inputPasswordError && <p>{inputPasswordError}</p>}
+          {inputPasswordError && (
+            <p className={styles.errorMsg}>{inputPasswordError}</p>
+          )}
           <div className={styles.formGroup}>
             <label htmlFor='confirmPassword'>Confirm your password:</label>
             <input
@@ -194,14 +196,16 @@ export default function Page() {
               onChange={(e) => setConfirmPassword(e.target.value)}
             ></input>
           </div>
-          {reEnteredPasswordError && <p>{reEnteredPasswordError}</p>}
+          {reEnteredPasswordError && (
+            <p className={styles.errorMsg}>{reEnteredPasswordError}</p>
+          )}
         </div>
         <div className={styles.buttonContainer}>
           <button type='submit' className={styles.submitButton}>
             Submit
           </button>
         </div>
-        {submitError && <p>{submitError}</p>}
+        {submitError && <p className={styles.errorMsg}>{submitError}</p>}
       </form>
     </main>
   );

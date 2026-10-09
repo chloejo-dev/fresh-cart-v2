@@ -8,7 +8,6 @@
     gap: 10px;
 }
 
-
 .inputContainer {
     width: 100%;
     max-width: 400px;
@@ -17,7 +16,6 @@
 .formGroup {
     gap: 6px;
     margin-bottom: 20px;
-    /* background-color: aquamarine; */
 
 }
 
@@ -43,4 +41,8 @@
 .signUpContainer {
     display: flex;
     gap: 0.5rem;
+}
+
+.errorMsg {
+    color: red;
 }
