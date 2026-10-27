@@ -1,6 +1,6 @@
 # Fresh Cart v2
 
-A full-stack grocery e-commerce application built with TypeScript, React, Next.js, and MySQL.
+A full-stack grocery e-commerce web application built with TypeScript, React, Next.js, and MySQL.
 
 ---
 
@@ -12,8 +12,11 @@ A full-stack grocery e-commerce application built with TypeScript, React, Next.j
 
 ## 🎯 Why I Started This Project
 
-Through coursework and academic projects, I've developed a strong foundation in web development.
-However, I wanted to go beyond assignments and build my own application from scratch to deepen my understanding and gain hands-on experience with the end-to-end development process, from relational database design and REST API development to automated testing and cloud deployment.
+I developed a strong foundation in web development through coursework, academic projects, and small personal projects.
+
+However, I wanted to build my own web application end-to-end to deepen my understanding of full-stack development and gain hands-on experience in everything from relational database design and REST API development to automated testing and cloud deployment.
+
+This project builds on Fresh Cart v1, which was originally developed using JavaScript and Express.js. I refactored the application using TypeScript and Next.js to improve type safety and consolidate the frontend and backend within a single framework.
 
 ---
 
@@ -29,29 +32,34 @@ However, I wanted to go beyond assignments and build my own application from scr
 
 ---
 
-## 🚀 Deployment
+## 🪏 Development Phases
 
-### Public Demo
+### Phase 1: Initial Development (June–August 2026)
 
-- The public demo is available on Vercel.
+#### Key Implementations:
 
-### Cloud Deployment Experience
-
-- Containerized the application using Docker
-- Managed the application and database containers using Docker Compose
-- Deployed the application to an AWS EC2 instance
-- Configured production environment variables for secure database connectivity and application configuration
+- Developed a RESTful API with 11 endpoints for authentication, product browsing, product search, shopping cart, and checkout.
+- Implemented secure user authentication using JWT.
+- Implemented guest cart merging after a successful sign-in.
+- Wrote unit and component tests using Jest and React Testing Library.
+- Deployed the application to AWS EC2 using Docker, Docker Compose, and Nginx.
 
 ---
 
-## 🧩 Features
+### Phase 2: Homepage Redesign (Oct 2026)
 
-- Browse products by category and view product details
-- Search products with search suggestions and view search results
-- Add products to the cart and complete checkout
-- Merge guest cart items after a successful sign-in
-- Sign up and sign in securely
-- Add and manage shipping addresses
+#### Key Improvements:
+
+- Redesigned the hero section to improve visual hierarchy.
+- Reorganized the header and footer to improve spacing and alignment.
+- Standardized icons using Lucide to improve visual consistency.
+
+---
+
+### Phase 3: Backend Architecture Refactoring (Oct 2026–Present)
+
+- Goal: Analyze the current backend architecture and refactor it into a clean monolith by applying Clean Architecture principles to improve separation of concerns, maintainability, and testability.
+- Status: In Progress
 
 ---
 
